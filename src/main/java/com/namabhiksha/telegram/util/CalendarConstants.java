@@ -1,4 +1,4 @@
-package com.godcanada.telegram.util;
+package com.namabhiksha.telegram.util;
 
 public class CalendarConstants {
     public static final String TELEGRAM_SEND_PHOTO = "sendPhoto";
