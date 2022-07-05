@@ -1,0 +1,12 @@
+server:
+  port: 9000
+
+util:
+  api-token: 5561632586:AAH7dXK2bRVuJoenKZnsstp5b_7VF1k0hCo
+  telegram-url: https://api.telegram.org/bot%s/%s
+  zoom-url: https://us02web.zoom.us/j/7629526122?pwd=RWo2VmFMRmNzcS9VblF1OEpEUkI0Zz09
+
+service-account:
+  private-key: godcanada-354600-18c327645dec.p12
+  email: namabhiksha@godcanada-354600.iam.gserviceaccount.com
+
