@@ -1,6 +1,6 @@
-package com.godcanada.telegram.config;
+package com.namabhiksha.telegram.config;
 
-import com.godcanada.telegram.controllers.GoogleCalendarScheduler;
+import com.namabhiksha.telegram.controllers.GoogleCalendarScheduler;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Configuration
-public class CalendarConfig {
+public class GoogleUtiliesConfig {
     /** Application name. */
     private static final String APPLICATION_NAME = "CalendarUtility";
     /** Global instance of the JSON factory. */

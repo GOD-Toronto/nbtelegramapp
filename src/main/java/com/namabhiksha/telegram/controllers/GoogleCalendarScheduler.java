@@ -1,8 +1,8 @@
-package com.godcanada.telegram.controllers;
+package com.namabhiksha.telegram.controllers;
 
-import com.godcanada.telegram.util.CalendarConstants;
-import com.godcanada.telegram.util.MessageBuilder;
-import com.godcanada.telegram.util.MultipartHelper;
+import com.namabhiksha.telegram.util.CalendarConstants;
+import com.namabhiksha.telegram.util.MessageBuilder;
+import com.namabhiksha.telegram.util.MultipartHelper;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import static com.godcanada.telegram.util.CalendarConstants.AMERICA_TORONTO;
-import static com.godcanada.telegram.util.CalendarConstants.START_TIME;
+import static com.namabhiksha.telegram.util.CalendarConstants.AMERICA_TORONTO;
+import static com.namabhiksha.telegram.util.CalendarConstants.START_TIME;
 
 public class GoogleCalendarScheduler {
 
