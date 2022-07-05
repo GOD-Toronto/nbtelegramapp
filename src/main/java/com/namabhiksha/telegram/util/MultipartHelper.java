@@ -1,7 +1,5 @@
-package com.godcanada.telegram.util;
+package com.namabhiksha.telegram.util;
 
-import com.google.api.client.http.HttpResponse;
-import com.google.api.services.drive.Drive;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
