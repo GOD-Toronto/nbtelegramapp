@@ -1,4 +1,4 @@
-package com.godcanada.telegram;
+package com.namabhiksha.telegram;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

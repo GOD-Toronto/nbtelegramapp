@@ -1,4 +1,4 @@
-package com.godcanada.telegram.util;
+package com.namabhiksha.telegram.util;
 
 public class MessageBuilder {
     public static final String newLine = System.getProperty("line.separator");

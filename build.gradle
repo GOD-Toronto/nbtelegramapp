@@ -4,7 +4,7 @@ plugins {
     id 'java'
 }
 
-group = 'org.godivinity'
+group = 'com.namabhiksha'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
@@ -28,7 +28,7 @@ dependencies {
 
 bootJar {
     manifest {
-        attributes 'Start-Class': 'com.godcanada.telegram.TelegramApplication'
+        attributes 'Start-Class': 'com.namabhiksha.telegram.TelegramApplication'
     }
 }
 
