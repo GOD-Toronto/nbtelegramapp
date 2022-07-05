@@ -21,19 +21,10 @@ public class MultipartHelper {
     private static final Logger log
             = org.apache.logging.log4j.LogManager.getLogger(MultipartHelper.class);
 
-    // action to be used for sending photo
-    private static final String telegramSendPhoto = "sendPhoto";
-
-    // action to be used for sending audio
-    private static final String telegramSendAudio = "sendAudio";
-
-    // action to be used for sending message
-    private static final String telegramSendMessage = "sendMessage";
-
     public static void processPhoto(String chatidentifier, String apiToken, InputStream in, String fileId, String cptMessage, String telegramUrl, String zoomUrl)
             throws IOException {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-            String urlStringPhoto = createUrlString(apiToken, telegramSendPhoto, telegramUrl);
+            String urlStringPhoto = createUrlString(apiToken, CalendarConstants.TELEGRAM_SEND_PHOTO, telegramUrl);
             StringBody chatid = new StringBody(chatidentifier, ContentType.TEXT_PLAIN);
             StringBody captionTxt = createCaption(cptMessage, zoomUrl, telegramUrl);
             // sending a photo
@@ -63,7 +54,7 @@ public class MultipartHelper {
         // compose the url
 
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-            String urlStringMusic = createUrlString(apiToken, telegramSendAudio, telegramUrl);
+            String urlStringMusic = createUrlString(apiToken, CalendarConstants.TELEGRAM_SEND_AUDIO, telegramUrl);
             StringBody chatid = new StringBody(chatidentifier, ContentType.TEXT_PLAIN);
             StringBody captionTxt = new StringBody(cptMessage, ContentType.TEXT_PLAIN);
             // sending an audio file

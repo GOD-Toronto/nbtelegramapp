@@ -1,6 +1,5 @@
 package com.namabhiksha.telegram.config;
 
-import com.namabhiksha.telegram.controllers.GoogleCalendarScheduler;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -10,7 +9,9 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
+import com.namabhiksha.telegram.controllers.GoogleCalendarScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -24,6 +25,13 @@ import java.util.List;
 
 @Configuration
 public class GoogleUtiliesConfig {
+
+    @Value("${service-account.private-key}")
+    private String serviceAccountPrivateKey;
+
+    @Value("${service-account.email}")
+    private String serviceAccountEmail;
+
     /** Application name. */
     private static final String APPLICATION_NAME = "CalendarUtility";
     /** Global instance of the JSON factory. */
@@ -43,12 +51,12 @@ public class GoogleUtiliesConfig {
     private GoogleCredential getCredentials(@Autowired NetHttpTransport httpTransport,
                                             @Autowired JsonFactory jsonFactory,
                                             List<String> scopes) throws IOException, GeneralSecurityException {
-        InputStream is = new ClassPathResource("godcanada-354600-18c327645dec.p12").getInputStream();
+        InputStream is = new ClassPathResource(serviceAccountPrivateKey).getInputStream();
        // File credentials = new File("config/godcanada-354600-18c327645dec.p12");
         return new GoogleCredential.Builder()
                 .setTransport(httpTransport)
                 .setJsonFactory(jsonFactory)
-                .setServiceAccountId("namabhiksha@godcanada-354600.iam.gserviceaccount.com")
+                .setServiceAccountId(serviceAccountEmail)
                 .setServiceAccountScopes(scopes)
                 .setServiceAccountPrivateKeyFromP12File(is)
                 .build();

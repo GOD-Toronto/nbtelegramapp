@@ -27,15 +27,15 @@ public class GoogleCalendarScheduler {
 
     private final Calendar calendar;
     private final Drive drive;
-    @Value("${telegramURL}")
+    @Value("${util.telegram-url}")
     private String telegramURL;
-    @Value("${calendarIdValue}")
+    @Value("${util.calendar-id}")
     private String calendarIdValue;
-    @Value("${chatId}")
+    @Value("${util.chat-id}")
     private String chatId;
-    @Value("${apiToken}")
+    @Value("${util.api-token}")
     private String apiToken;
-    @Value("${zoomUrl}")
+    @Value("${util.zoom-url}")
     private String zoomUrl;
     private final Set<String> parsedTimeSlots;
 
