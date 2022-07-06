@@ -9,25 +9,23 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
-import com.namabhiksha.telegram.controllers.GoogleCalendarScheduler;
+import com.namabhiksha.telegram.schedulers.AnnouncementsScheduler;
+import com.namabhiksha.telegram.schedulers.NamaSlotsScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Configuration
 public class GoogleUtiliesConfig {
 
-    @Value("${service-account.private-key}")
-    private String serviceAccountPrivateKey;
+    @Value("${service-account.json}")
+    private String serviceAccountJson;
 
     @Value("${service-account.email}")
     private String serviceAccountEmail;
@@ -36,7 +34,8 @@ public class GoogleUtiliesConfig {
     private static final String APPLICATION_NAME = "CalendarUtility";
     /** Global instance of the JSON factory. */
 
-    private final List<String> scopes = Arrays.asList(CalendarScopes.CALENDAR, DriveScopes.DRIVE_FILE, DriveScopes.DRIVE_PHOTOS_READONLY, DriveScopes.DRIVE);
+
+    private final List<String> scopes = Arrays.asList(DriveScopes.DRIVE, CalendarScopes.CALENDAR);
 
     @Bean
     public NetHttpTransport getHttpTransport() throws GeneralSecurityException, IOException {
@@ -49,23 +48,25 @@ public class GoogleUtiliesConfig {
     }
 
     private GoogleCredential getCredentials(@Autowired NetHttpTransport httpTransport,
-                                            @Autowired JsonFactory jsonFactory,
-                                            List<String> scopes) throws IOException, GeneralSecurityException {
-        InputStream is = new ClassPathResource(serviceAccountPrivateKey).getInputStream();
-       // File credentials = new File("config/godcanada-354600-18c327645dec.p12");
-        return new GoogleCredential.Builder()
+                                            @Autowired JsonFactory jsonFactory) throws IOException, GeneralSecurityException {
+
+        return GoogleCredential.fromStream(this.getClass().getClassLoader().getResourceAsStream(serviceAccountJson))
+                .createScoped(scopes);
+
+     /*   InputStream is = new ClassPathResource(serviceAccountPrivateKey).getInputStream();
+          return new GoogleCredential.Builder()
                 .setTransport(httpTransport)
                 .setJsonFactory(jsonFactory)
                 .setServiceAccountId(serviceAccountEmail)
                 .setServiceAccountScopes(scopes)
                 .setServiceAccountPrivateKeyFromP12File(is)
-                .build();
+                .build();*/
     }
 
     @Bean
     public Calendar googleCalendar(@Autowired NetHttpTransport httpTransport,
                                    @Autowired JsonFactory jsonFactory) throws GeneralSecurityException, IOException {
-        GoogleCredential googleCredential = getCredentials(httpTransport, jsonFactory, Collections.singletonList(CalendarScopes.CALENDAR));
+        GoogleCredential googleCredential = getCredentials(httpTransport, jsonFactory);
         return new Calendar.Builder(httpTransport, jsonFactory, googleCredential)
                 .setApplicationName(APPLICATION_NAME)
                 .setHttpRequestInitializer(googleCredential)
@@ -75,7 +76,7 @@ public class GoogleUtiliesConfig {
     @Bean
     public Drive googleDrive(@Autowired NetHttpTransport httpTransport,
                              @Autowired JsonFactory jsonFactory) throws GeneralSecurityException, IOException {
-        GoogleCredential googleCredential = getCredentials(httpTransport, jsonFactory, Collections.singletonList(DriveScopes.DRIVE));
+        GoogleCredential googleCredential = getCredentials(httpTransport, jsonFactory);
         return new Drive.Builder(httpTransport, jsonFactory, googleCredential)
                 .setApplicationName(APPLICATION_NAME)
                 .setHttpRequestInitializer(googleCredential)
@@ -83,8 +84,14 @@ public class GoogleUtiliesConfig {
     }
 
     @Bean
-    public GoogleCalendarScheduler googleCalendarScheduler(@Autowired Calendar calendar,
-                                                           @Autowired Drive drive){
-        return new GoogleCalendarScheduler(calendar, drive);
+    public NamaSlotsScheduler namaSlotsScheduler(@Autowired Calendar calendar,
+                                                      @Autowired Drive drive){
+        return new NamaSlotsScheduler(calendar, drive);
+    }
+
+    @Bean
+    public AnnouncementsScheduler announcementsScheduler(@Autowired Calendar calendar,
+                                                          @Autowired Drive drive){
+        return new AnnouncementsScheduler(calendar, drive);
     }
 }
