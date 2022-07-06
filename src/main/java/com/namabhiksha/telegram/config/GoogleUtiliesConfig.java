@@ -9,7 +9,8 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
-import com.namabhiksha.telegram.controllers.GoogleCalendarScheduler;
+import com.namabhiksha.telegram.controllers.AnnouncementsScheduler;
+import com.namabhiksha.telegram.controllers.NamaSlotsScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -35,8 +36,6 @@ public class GoogleUtiliesConfig {
     /** Application name. */
     private static final String APPLICATION_NAME = "CalendarUtility";
     /** Global instance of the JSON factory. */
-
-    private final List<String> scopes = Arrays.asList(CalendarScopes.CALENDAR, DriveScopes.DRIVE_FILE, DriveScopes.DRIVE_PHOTOS_READONLY, DriveScopes.DRIVE);
 
     @Bean
     public NetHttpTransport getHttpTransport() throws GeneralSecurityException, IOException {
@@ -75,7 +74,13 @@ public class GoogleUtiliesConfig {
     @Bean
     public Drive googleDrive(@Autowired NetHttpTransport httpTransport,
                              @Autowired JsonFactory jsonFactory) throws GeneralSecurityException, IOException {
-        GoogleCredential googleCredential = getCredentials(httpTransport, jsonFactory, Collections.singletonList(DriveScopes.DRIVE));
+        GoogleCredential googleCredential = getCredentials(httpTransport, jsonFactory,
+                Arrays.asList(DriveScopes.DRIVE_READONLY,
+                        DriveScopes.DRIVE_METADATA_READONLY,
+                        DriveScopes.DRIVE,
+                        DriveScopes.DRIVE_FILE,
+                        DriveScopes.DRIVE_PHOTOS_READONLY,
+                        DriveScopes.DRIVE_METADATA));
         return new Drive.Builder(httpTransport, jsonFactory, googleCredential)
                 .setApplicationName(APPLICATION_NAME)
                 .setHttpRequestInitializer(googleCredential)
@@ -83,8 +88,14 @@ public class GoogleUtiliesConfig {
     }
 
     @Bean
-    public GoogleCalendarScheduler googleCalendarScheduler(@Autowired Calendar calendar,
-                                                           @Autowired Drive drive){
-        return new GoogleCalendarScheduler(calendar, drive);
+    public NamaSlotsScheduler namaSlotsScheduler(@Autowired Calendar calendar,
+                                                      @Autowired Drive drive){
+        return new NamaSlotsScheduler(calendar, drive);
+    }
+
+    @Bean
+    public AnnouncementsScheduler announcementsScheduler(@Autowired Calendar calendar,
+                                                          @Autowired Drive drive){
+        return new AnnouncementsScheduler(calendar, drive);
     }
 }

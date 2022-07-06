@@ -12,6 +12,8 @@ public class MessageBuilder {
                 .replace("&nbsp;", " ")
                 .replace("<p>", "")
                 .replace("</p>", "")
+                .replace("�", "")
+                .replace("&amp;", "")
                 .replace("<br>", newLine);
     }
 

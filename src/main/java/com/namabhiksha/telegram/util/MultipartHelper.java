@@ -12,7 +12,9 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Example how to use multipart/form encoded POST request.
@@ -21,7 +23,7 @@ public class MultipartHelper {
     private static final Logger log
             = org.apache.logging.log4j.LogManager.getLogger(MultipartHelper.class);
 
-    public static void processPhoto(String chatidentifier, String apiToken, InputStream in, String fileId, String cptMessage, String telegramUrl, String zoomUrl)
+    public static void processPhoto(String chatidentifier, String apiToken, File file, String cptMessage, String telegramUrl, String zoomUrl)
             throws IOException {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             String urlStringPhoto = createUrlString(apiToken, CalendarConstants.TELEGRAM_SEND_PHOTO, telegramUrl);
@@ -30,16 +32,11 @@ public class MultipartHelper {
             // sending a photo
             HttpPost httppost = new HttpPost(urlStringPhoto);
 
-            //FileBody bin = new FileBody(fileName);
-            StringBody parseMode = new StringBody("HTML", ContentType.TEXT_PLAIN);
-
+            FileBody bin = new FileBody(file);
+            StringBody parseMode = new StringBody("HTML", ContentType.TEXT_HTML);
             HttpEntity reqEntity = MultipartEntityBuilder.create()
                     .addPart("chat_id", chatid)
-                    .addBinaryBody(
-                            "file",
-                            in,
-                            ContentType.APPLICATION_OCTET_STREAM,
-                            fileId)
+                    .addPart("photo", bin)
                     .addPart("caption", captionTxt)
                     .addPart("parse_mode", parseMode)
                     .build();

@@ -1,6 +1,3 @@
-server:
-  port: 9001
-
 util:
   calendar-id: 9s93iiddq17kr95rumchtmp4mc@group.calendar.google.com
   chat-id: -1001699194736

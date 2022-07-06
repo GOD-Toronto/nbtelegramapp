@@ -1,6 +1,9 @@
-server:
-  port: 9003
-
 util:
-  calendar-id: i7iji32f77u6341uiv2r1banos@group.calendar.google.com
-  chat-id: -1001670736501
+  nama-slots:
+    calendar-id: i7iji32f77u6341uiv2r1banos@group.calendar.google.com
+    chat-id: -1001670736501
+    schedule-time: 10
+  announcements:
+    calendar-id: gqhuuojj5287skvo4h4kjlu02s@group.calendar.google.com
+    chat-id: -1001670736501
+    schedule-time: 10
