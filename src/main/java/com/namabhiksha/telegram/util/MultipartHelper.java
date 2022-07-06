@@ -12,7 +12,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Example how to use multipart/form encoded POST request.
@@ -21,37 +22,34 @@ public class MultipartHelper {
     private static final Logger log
             = org.apache.logging.log4j.LogManager.getLogger(MultipartHelper.class);
 
-    public static void processPhoto(String chatidentifier, String apiToken, InputStream in, String fileId, String cptMessage, String telegramUrl, String zoomUrl)
+    public static void processPhoto(String chatidentifier, String apiToken, String fileName, String cptMessage, String telegramUrl, String zoomUrl)
             throws IOException {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             String urlStringPhoto = createUrlString(apiToken, CalendarConstants.TELEGRAM_SEND_PHOTO, telegramUrl);
             StringBody chatid = new StringBody(chatidentifier, ContentType.TEXT_PLAIN);
-            StringBody captionTxt = createCaption(cptMessage, zoomUrl, telegramUrl);
+
+            StringBody captionTxt = createCaption(cptMessage, zoomUrl, false);
             // sending a photo
             HttpPost httppost = new HttpPost(urlStringPhoto);
 
-            //FileBody bin = new FileBody(fileName);
+            File file = new File(fileName);
+            FileBody bin = new FileBody(file);
             StringBody parseMode = new StringBody("HTML", ContentType.TEXT_PLAIN);
-
             HttpEntity reqEntity = MultipartEntityBuilder.create()
                     .addPart("chat_id", chatid)
-                    .addBinaryBody(
-                            "file",
-                            in,
-                            ContentType.APPLICATION_OCTET_STREAM,
-                            fileId)
+                    .addPart("photo", bin)
                     .addPart("caption", captionTxt)
                     .addPart("parse_mode", parseMode)
                     .build();
 
             sendInstruction(httpclient, httppost, reqEntity);
 
+            log.info("processPhoto::File name: [{}], deleted status:[{}}", file.getName(), file.delete());
         }
     }
 
     public static void processMusic(String chatidentifier, String apiToken, String fileName, String cptMessage, String telegramUrl, String zoomUrl)
             throws IOException {
-        // compose the url
 
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             String urlStringMusic = createUrlString(apiToken, CalendarConstants.TELEGRAM_SEND_AUDIO, telegramUrl);
@@ -60,7 +58,9 @@ public class MultipartHelper {
             // sending an audio file
             HttpPost httppost = new HttpPost(urlStringMusic);
 
-            FileBody bin = new FileBody(new File(fileName));
+            File file = new File(fileName);
+
+            FileBody bin = new FileBody(file);
 
             HttpEntity reqEntity = MultipartEntityBuilder.create()
                     .addPart("chat_id", chatid)
@@ -71,7 +71,7 @@ public class MultipartHelper {
                     .build();
 
             sendInstruction(httpclient, httppost, reqEntity);
-
+            file.delete();
         }
     }
 
@@ -105,7 +105,7 @@ public class MultipartHelper {
             log.info(response.getStatusLine());
             HttpEntity resEntity = response.getEntity();
             if (resEntity != null) {
-                log.info("Response content length: " + resEntity.getContentLength());
+                log.info("sendInstruction::Response content length: " + resEntity.getContentLength());
             }
             EntityUtils.consume(resEntity);
         }
@@ -120,9 +120,20 @@ public class MultipartHelper {
         }
     }
 
+    private static StringBody createCaption(String cptMessage, String url, boolean needLink) {
+        if (cptMessage != null && cptMessage.length() > 0) {
+            if (needLink) {
+                return new StringBody("<b><a href=\"" + url + "\">" + cptMessage + "</a></b>",
+                        ContentType.TEXT_PLAIN);
+            } else {
+                return new StringBody(cptMessage, ContentType.TEXT_PLAIN);
+            }
+        } else {
+            return new StringBody("", ContentType.TEXT_PLAIN);
+        }
+    }
+
     private static String createUrlString(String apiToken, String action, String telegramURL) {
         return String.format(telegramURL, apiToken, action);
     }
-
-
 }
