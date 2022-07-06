@@ -10,6 +10,8 @@ import com.google.api.services.drive.model.File;
 import com.namabhiksha.telegram.util.CalendarConstants;
 import com.namabhiksha.telegram.util.MessageBuilder;
 import com.namabhiksha.telegram.util.MultipartHelper;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -60,12 +62,12 @@ public class AnnouncementsScheduler {
 
     @Scheduled(fixedRateString = "${util.nama-slots.schedule-time}", timeUnit = TimeUnit.MINUTES, zone = AMERICA_TORONTO)
     public void run() throws Exception {
-        log.info("run invoked");
+        log.info("run::run invoked");
         getEvents(maxTimeCheck);
     }
 
     private void getEvents(long milliseconds) throws Exception {
-        log.info("run invoked");
+        log.info("getEvents");
         long currentMilliSeconds = System.currentTimeMillis();
         DateTime ctimemin = new DateTime(currentMilliSeconds);
         DateTime ctimemax = new DateTime(currentMilliSeconds + milliseconds);
@@ -82,9 +84,9 @@ public class AnnouncementsScheduler {
 
         List<Event> items = events.getItems();
         if (items.isEmpty()) {
-            log.info("No upcoming events found.");
+            log.info("getEvents::No upcoming events found.");
         } else {
-            for (Event event: items) {
+            for (Event event : items) {
 
                 if (event.getSummary().contains(CalendarConstants.LAST_SLOT)) {
                     parsedTimeSlots.clear();
@@ -98,31 +100,40 @@ public class AnnouncementsScheduler {
                 // either the event has posters or just the text..
                 if (eventAttachItemsOptional.isPresent()) {
                     List<EventAttachment> eventAttachments = event.getAttachments();
-                    EventAttachment eventAttach = event.getAttachments().get(0);
-                    String fileId = eventAttach.getFileId();
-                    if (!eventAttachments.isEmpty()) {
-                        description = MessageBuilder.removeHTMLBlob(event.getDescription());
-                        log.info(description);
 
-                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-                        File file = drive.files().get(fileId).execute();
-                        String fileName = file.getName();
-                        drive.files().get(fileId).executeMediaAndDownloadTo(outputStream);
-
-                        FileOutputStream outputfile = new FileOutputStream(fileName);
-                        outputStream.writeTo(outputfile);
-
-                        MultipartHelper.processPhoto(chatId,
-                                apiToken,
-                                fileName,
-                                description,
-                                telegramURL,
-                                zoomUrl);
+                    if (eventAttachments.isEmpty()) {
+                        continue;
                     }
+
+                    EventAttachment eventAttach = event.getAttachments().get(0);
+
+                    String fileId = eventAttach.getFileId();
+                    description = MessageBuilder.removeHTMLBlob(event.getDescription());
+                    log.info("getEvents::description = [{}]", description);
+
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    File file = drive.files().get(fileId).execute();
+                    String fileName = file.getName();
+
+                    log.info("getEvents::fileName = [{}]", fileName);
+
+                    drive.files().get(fileId).executeMediaAndDownloadTo(outputStream);
+
+                    FileOutputStream outputfile = new FileOutputStream(fileName);
+                    outputStream.writeTo(outputfile);
+                    outputfile.close();
+                    outputStream.close();
+
+                    MultipartHelper.processPhoto(chatId,
+                            apiToken,
+                            fileName,
+                            description,
+                            telegramURL,
+                            zoomUrl);
+
                 } else {
                     description = MessageBuilder.removeHTMLBlob(event.getDescription());
-                    log.info(description);
+                    log.info("getEvents::description = [{}]", description);
                     MultipartHelper.processTextMessage(chatId,
                             apiToken,
                             description,

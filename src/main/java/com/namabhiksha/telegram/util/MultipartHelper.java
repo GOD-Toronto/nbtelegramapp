@@ -31,7 +31,8 @@ public class MultipartHelper {
             // sending a photo
             HttpPost httppost = new HttpPost(urlStringPhoto);
 
-            FileBody bin = new FileBody(new File(fileName));
+            File file = new File(fileName);
+            FileBody bin = new FileBody(file);
             StringBody parseMode = new StringBody("HTML", ContentType.TEXT_PLAIN);
             HttpEntity reqEntity = MultipartEntityBuilder.create()
                     .addPart("chat_id", chatid)
@@ -41,14 +42,12 @@ public class MultipartHelper {
                     .build();
 
             sendInstruction(httpclient, httppost, reqEntity);
-
+            log.info("processPhoto::File name: [{}], deleted status:[{}}", file.getName(), file.delete());
         }
     }
 
     public static void processMusic(String chatidentifier, String apiToken, String fileName, String cptMessage, String telegramUrl, String zoomUrl)
             throws IOException {
-        // compose the url
-
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             String urlStringMusic = createUrlString(apiToken, CalendarConstants.TELEGRAM_SEND_AUDIO, telegramUrl);
             StringBody chatid = new StringBody(chatidentifier, ContentType.TEXT_PLAIN);
@@ -56,7 +55,9 @@ public class MultipartHelper {
             // sending an audio file
             HttpPost httppost = new HttpPost(urlStringMusic);
 
-            FileBody bin = new FileBody(new File(fileName));
+            File file = new File(fileName);
+
+            FileBody bin = new FileBody(file);
 
             HttpEntity reqEntity = MultipartEntityBuilder.create()
                     .addPart("chat_id", chatid)
@@ -68,6 +69,7 @@ public class MultipartHelper {
 
             sendInstruction(httpclient, httppost, reqEntity);
 
+            file.delete();
         }
     }
 
@@ -101,7 +103,7 @@ public class MultipartHelper {
             log.info(response.getStatusLine());
             HttpEntity resEntity = response.getEntity();
             if (resEntity != null) {
-                log.info("Response content length: " + resEntity.getContentLength());
+                log.info("sendInstruction::Response content length: " + resEntity.getContentLength());
             }
             EntityUtils.consume(resEntity);
         }
@@ -132,6 +134,4 @@ public class MultipartHelper {
     private static String createUrlString(String apiToken, String action, String telegramURL) {
         return String.format(telegramURL, apiToken, action);
     }
-
-
 }

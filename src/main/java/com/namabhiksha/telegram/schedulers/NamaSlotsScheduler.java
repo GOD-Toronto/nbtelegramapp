@@ -54,12 +54,12 @@ public class NamaSlotsScheduler {
 
     @Scheduled(fixedRateString = "${util.nama-slots.schedule-time}", timeUnit = TimeUnit.MINUTES, zone = AMERICA_TORONTO)
     public void run() throws Exception {
-        log.info("run invoked");
+        log.info("run::run invoked");
         getEvents(maxTimeCheck);
     }
 
     private void getEvents(long milliseconds) throws Exception {
-        log.info("run invoked");
+        log.info("getEvents");
         long currentMilliSeconds = System.currentTimeMillis();
         DateTime ctimemin = new DateTime(currentMilliSeconds);
         DateTime ctimemax = new DateTime(currentMilliSeconds + milliseconds);
@@ -76,7 +76,7 @@ public class NamaSlotsScheduler {
 
         List<Event> items = events.getItems();
         if (items.isEmpty()) {
-            log.info("No upcoming events found.");
+            log.info("getEvents::No upcoming events found.");
         } else {
             for (Event event: items) {
 
@@ -88,7 +88,7 @@ public class NamaSlotsScheduler {
                 } else {
                     String description = MessageBuilder.removeHTMLBlob(event.getDescription());
 
-                    log.info(description);
+                    log.info("getEvents::description = [{}]", description);
 
                     MultipartHelper.processTextMessage(chatId,
                             apiToken,
