@@ -46,11 +46,11 @@ jobs:
         run: ./gradlew clean test
 
       - name: Build and analyze
-        run: ./gradlew build --info  
+        run: ./gradlew build --info
+
+      - name: "Copy Artifact to superceded s3"    
+        run: "aws s3 cp s3://${{ env.S3BUCKET }}/*jar s3://${{ env.S3BUCKET }}/superceded/"
       
-  
-
-
       # - name: "Upload Artifact to s3"
-      #   run: "aws s3 cp *.jar s3://${{ env.S3BUCKET }}/"
-      #   working-directory: "${{ env.applicationfolder }}/target"
+      #   run: "aws s3 cp /libs/*.jar s3://${{ env.S3BUCKET }}/"
+      #   working-directory: "${{ env.applicationfolder }}/build"
