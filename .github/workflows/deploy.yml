@@ -30,20 +30,20 @@ jobs:
           distribution: adopt
           java-version: 17
 
-    - uses: actions/cache@v2
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
     
-    - name: Test with Gradle
-      run: ./gradlew clean test
+      - name: Test with Gradle
+        run: ./gradlew clean test
 
-    - name: Build and analyze
-      run: ./gradlew build --info  
+      - name: Build and analyze
+        run: ./gradlew build --info  
       
   
 
