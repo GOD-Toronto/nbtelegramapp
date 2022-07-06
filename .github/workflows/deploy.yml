@@ -51,14 +51,22 @@ jobs:
       # - name: "Copy Artifact to superceded s3"    
       #   run: "aws s3 cp s3://${{ env.S3BUCKET }}/nbtelegramapp-0.0.1-SNAPSHOT.jar s3://${{ env.S3BUCKET }}/superceded/"
 
-      - name: "clear the s3 bucket"
-        run: aws s3 rm s3://${{ env.S3BUCKET }}/ --recursive  
+      # - name: "clear the s3 bucket"
+      #   run: aws s3 rm s3://${{ env.S3BUCKET }}/ --recursive  
 
-      - name: "Copy JAR to S3"
-        run: aws s3 sync build/libs/*.jar s3://${{ env.S3BUCKET }}
+      - name: "Run pwd bash"
+        run: pwd
+
+      - name: "Run ls bash"
+        run: ls /home/runner/work/nbtelegramapp/nbtelegramapp/build/lib/
+
+      # - name: "Copy JAR to S3"
+      #   run: aws s3 sync /home/runner/work/nbtelegramapp/nbtelegramapp/build/lib/*.jar s3://nama-bhiksha
 
       # - name: "Upload Artifact to s3"
       #   run: "aws s3 cp /libs/*.jar s3://${{ env.S3BUCKET }}/"
       #   working-directory: "${{ env.applicationfolder }}/build"
 
       #C:\Projects\nbtelegramapp\build\libs\nbtelegramapp-0.0.1-SNAPSHOT.jar
+
+      #/home/runner/work/nbtelegramapp/nbtelegramapp/build/lib/nbtelegramapp-0.0.1-SNAPSHOT.jar
