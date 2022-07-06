@@ -55,8 +55,10 @@ jobs:
         run: aws s3 rm s3://${{ env.S3BUCKET }}/ --recursive  
 
       - name: "Copy JAR to S3"
-        run: aws s3 sync ./libs/*.jar s3://${{ env.S3BUCKET }}
+        run: aws s3 sync ./build/libs/*.jar s3://${{ env.S3BUCKET }}
 
       # - name: "Upload Artifact to s3"
       #   run: "aws s3 cp /libs/*.jar s3://${{ env.S3BUCKET }}/"
       #   working-directory: "${{ env.applicationfolder }}/build"
+
+      C:\Projects\nbtelegramapp\build\libs\nbtelegramapp-0.0.1-SNAPSHOT.jar
