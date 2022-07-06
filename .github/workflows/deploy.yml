@@ -49,7 +49,7 @@ jobs:
         run: ./gradlew build --info
 
       - name: "Copy Artifact to superceded s3"    
-        run: "aws s3 cp s3://${{ env.S3BUCKET }}/*jar s3://${{ env.S3BUCKET }}/superceded/"
+        run: "aws s3 cp s3://${{ env.S3BUCKET }}/nbtelegramapp-0.0.1-SNAPSHOT.jar s3://${{ env.S3BUCKET }}/superceded/"
       
       # - name: "Upload Artifact to s3"
       #   run: "aws s3 cp /libs/*.jar s3://${{ env.S3BUCKET }}/"
