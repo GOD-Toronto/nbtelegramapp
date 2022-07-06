@@ -55,7 +55,7 @@ jobs:
       #   run: aws s3 rm s3://${{ env.S3BUCKET }}/ --recursive  
 
       - name: "Run pwd bash"
-        run:  cd build/lib/
+        run:  cd build
       - name: "Run ls bash"
         run:  ls  
 
