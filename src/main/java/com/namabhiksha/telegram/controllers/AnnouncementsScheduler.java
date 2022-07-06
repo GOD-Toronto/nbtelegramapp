@@ -35,6 +35,9 @@ public class AnnouncementsScheduler {
     private String calendarIdValue;
     @Value("${util.announcements.chat-id}")
     private String chatId;
+
+    @Value("${util.announcements.max-check-time}")
+    private long maxTimeCheck;
     @Value("${util.api-token}")
     private String apiToken;
     @Value("${util.zoom-url}")
@@ -57,7 +60,7 @@ public class AnnouncementsScheduler {
     @Scheduled(fixedRateString = "${util.nama-slots.schedule-time}", timeUnit = TimeUnit.MINUTES, zone = AMERICA_TORONTO)
     public void run() throws Exception {
         log.info("run invoked");
-        getEvents(1800000);
+        getEvents(maxTimeCheck);
     }
 
     private void getEvents(long milliseconds) throws Exception {
@@ -67,7 +70,7 @@ public class AnnouncementsScheduler {
         DateTime ctimemax = new DateTime(currentMilliSeconds + milliseconds);
 
         Events events = calendar.events().list(calendarIdValue)
-                .setMaxResults(2)
+                .setMaxResults(1)
                 .setTimeMin(ctimemin)
                 .setTimeMax(ctimemax)
                 .setTimeZone(AMERICA_TORONTO)
@@ -95,7 +98,7 @@ public class AnnouncementsScheduler {
                 if (eventAttachItemsOptional.isPresent()) {
                     List<EventAttachment> eventAttachments = event.getAttachments();
                     if (!eventAttachments.isEmpty()) {
-                        description = event.getDescription();
+                        description = MessageBuilder.removeHTMLBlob(event.getDescription());
                         log.info(description);
                         MultipartHelper.processPhoto(chatId,
                                 apiToken,

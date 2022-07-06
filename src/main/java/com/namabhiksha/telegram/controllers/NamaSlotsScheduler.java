@@ -30,6 +30,8 @@ public class NamaSlotsScheduler {
     private String calendarIdValue;
     @Value("${util.nama-slots.chat-id}")
     private String chatId;
+    @Value("${util.nama-slots.max-check-time}")
+    private long maxTimeCheck;
     @Value("${util.api-token}")
     private String apiToken;
     @Value("${util.zoom-url}")
@@ -53,7 +55,7 @@ public class NamaSlotsScheduler {
     @Scheduled(fixedRateString = "${util.nama-slots.schedule-time}", timeUnit = TimeUnit.MINUTES, zone = AMERICA_TORONTO)
     public void run() throws Exception {
         log.info("run invoked");
-        getEvents(1800000);
+        getEvents(maxTimeCheck);
     }
 
     private void getEvents(long milliseconds) throws Exception {
@@ -63,7 +65,7 @@ public class NamaSlotsScheduler {
         DateTime ctimemax = new DateTime(currentMilliSeconds + milliseconds);
 
         Events events = calendar.events().list(calendarIdValue)
-                .setMaxResults(2)
+                .setMaxResults(1)
                 .setTimeMin(ctimemin)
                 .setTimeMax(ctimemax)
                 .setTimeZone(AMERICA_TORONTO)

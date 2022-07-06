@@ -14,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Example how to use multipart/form encoded POST request.
@@ -33,7 +32,7 @@ public class MultipartHelper {
             HttpPost httppost = new HttpPost(urlStringPhoto);
 
             FileBody bin = new FileBody(file);
-            StringBody parseMode = new StringBody("HTML", ContentType.TEXT_HTML);
+            StringBody parseMode = new StringBody("HTML", ContentType.TEXT_PLAIN);
             HttpEntity reqEntity = MultipartEntityBuilder.create()
                     .addPart("chat_id", chatid)
                     .addPart("photo", bin)

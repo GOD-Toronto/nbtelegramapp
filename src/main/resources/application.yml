@@ -8,11 +8,13 @@ util:
   nama-slots:
     calendar-id: 8hddjf9tmq6t707od51ncqiaug@group.calendar.google.com
     chat-id: -1001699194736
-    schedule-time: 30
+    schedule-time: 15
+    max-check-time: 900000
   announcements:
     calendar-id: n5piq09brtl7646a08s1hojmr8@group.calendar.google.com
     chat-id: -1001699194736
-    schedule-time: 30
+    schedule-time: 15
+    max-check-time: 900000
 
 service-account:
   private-key: godcanada-354600-18c327645dec.p12
