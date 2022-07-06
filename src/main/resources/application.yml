@@ -9,4 +9,3 @@ util:
 service-account:
   json: godcanada-354600-cf3f9d413f24.json
   email: namabhiksha@godcanada-354600.iam.gserviceaccount.com
-
