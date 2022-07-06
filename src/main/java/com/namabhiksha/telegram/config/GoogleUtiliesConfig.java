@@ -15,21 +15,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Configuration
 public class GoogleUtiliesConfig {
 
-    @Value("${service-account.private-key}")
-    private String serviceAccountPrivateKey;
+    @Value("${service-account.json}")
+    private String serviceAccountJson;
 
     @Value("${service-account.email}")
     private String serviceAccountEmail;
@@ -52,14 +48,18 @@ public class GoogleUtiliesConfig {
 
     private GoogleCredential getCredentials(@Autowired NetHttpTransport httpTransport,
                                             @Autowired JsonFactory jsonFactory) throws IOException, GeneralSecurityException {
-        InputStream is = new ClassPathResource(serviceAccountPrivateKey).getInputStream();
-        return new GoogleCredential.Builder()
+
+        return GoogleCredential.fromStream(this.getClass().getClassLoader().getResourceAsStream(serviceAccountJson))
+                .createScoped(scopes);
+
+     /*   InputStream is = new ClassPathResource(serviceAccountPrivateKey).getInputStream();
+          return new GoogleCredential.Builder()
                 .setTransport(httpTransport)
                 .setJsonFactory(jsonFactory)
                 .setServiceAccountId(serviceAccountEmail)
                 .setServiceAccountScopes(scopes)
                 .setServiceAccountPrivateKeyFromP12File(is)
-                .build();
+                .build();*/
     }
 
     @Bean
