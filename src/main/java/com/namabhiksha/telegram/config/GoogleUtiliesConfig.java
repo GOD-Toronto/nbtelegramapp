@@ -34,7 +34,6 @@ public class GoogleUtiliesConfig {
     private static final String APPLICATION_NAME = "CalendarUtility";
     /** Global instance of the JSON factory. */
 
-
     private final List<String> scopes = Arrays.asList(DriveScopes.DRIVE, CalendarScopes.CALENDAR);
 
     @Bean
