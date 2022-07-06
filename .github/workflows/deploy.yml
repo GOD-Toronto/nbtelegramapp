@@ -37,7 +37,7 @@ jobs:
         run: chmod +x ./gradlew
       
       - name: "Execute with Gradle"
-        run: "./gradlew build --scan --no-daemon"
+        run: "./gradlew build
       
 
 
