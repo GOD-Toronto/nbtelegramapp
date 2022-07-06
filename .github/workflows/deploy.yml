@@ -36,6 +36,7 @@ jobs:
       - name: "Execute with Gradle"
         run: "./gradlew build --scan --no-daemon"
       
+
       
       # - name: "Upload Artifact to s3"
       #   run: "aws s3 cp *.jar s3://${{ env.S3BUCKET }}/"
