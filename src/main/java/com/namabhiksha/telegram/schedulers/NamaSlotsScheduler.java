@@ -1,9 +1,8 @@
-package com.namabhiksha.telegram.controllers;
+package com.namabhiksha.telegram.schedulers;
 
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
-import com.google.api.services.calendar.model.EventAttachment;
 import com.google.api.services.calendar.model.Events;
 import com.google.api.services.drive.Drive;
 import com.namabhiksha.telegram.util.CalendarConstants;
@@ -11,43 +10,39 @@ import com.namabhiksha.telegram.util.MessageBuilder;
 import com.namabhiksha.telegram.util.MultipartHelper;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.io.File;
-import java.io.InputStream;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static com.namabhiksha.telegram.util.CalendarConstants.AMERICA_TORONTO;
 import static com.namabhiksha.telegram.util.CalendarConstants.START_TIME;
 
-public class AnnouncementsScheduler {
+public class NamaSlotsScheduler {
 
     private final Calendar calendar;
     private final Drive drive;
     @Value("${util.telegram-url}")
     private String telegramURL;
-    @Value("${util.announcements.calendar-id}")
+    @Value("${util.nama-slots.calendar-id}")
     private String calendarIdValue;
-    @Value("${util.announcements.chat-id}")
+    @Value("${util.nama-slots.chat-id}")
     private String chatId;
-
-    @Value("${util.announcements.max-check-time}")
+    @Value("${util.nama-slots.max-check-time}")
     private long maxTimeCheck;
     @Value("${util.api-token}")
     private String apiToken;
     @Value("${util.zoom-url}")
     private String zoomUrl;
+
     private final Set<String> parsedTimeSlots;
 
     private static final Logger log
-            = org.apache.logging.log4j.LogManager.getLogger(AnnouncementsScheduler.class);
+            = org.apache.logging.log4j.LogManager.getLogger(NamaSlotsScheduler.class);
 
-    public AnnouncementsScheduler(Calendar calendar, Drive drive) {
+    public NamaSlotsScheduler(Calendar calendar, Drive drive) {
         this.calendar = calendar;
         this.drive = drive;
         this.parsedTimeSlots = new HashSet<>();
@@ -90,26 +85,11 @@ public class AnnouncementsScheduler {
                     continue;
                 } else if (parsedTimeSlots.contains(event.getId())) {
                     continue;
-                }
-
-                Optional<List<EventAttachment>> eventAttachItemsOptional = Optional.ofNullable(event.getAttachments());
-                String description = null;
-                // either the event has posters or just the text..
-                if (eventAttachItemsOptional.isPresent()) {
-                    List<EventAttachment> eventAttachments = event.getAttachments();
-                    if (!eventAttachments.isEmpty()) {
-                        description = MessageBuilder.removeHTMLBlob(event.getDescription());
-                        log.info(description);
-                        MultipartHelper.processPhoto(chatId,
-                                apiToken,
-                                getFile(event.getSummary()),
-                                description,
-                                telegramURL,
-                                zoomUrl);
-                    }
                 } else {
-                    description = MessageBuilder.removeHTMLBlob(event.getDescription());
+                    String description = MessageBuilder.removeHTMLBlob(event.getDescription());
+
                     log.info(description);
+
                     MultipartHelper.processTextMessage(chatId,
                             apiToken,
                             description,
@@ -120,10 +100,5 @@ public class AnnouncementsScheduler {
                 parsedTimeSlots.add(event.getId());
             }
         }
-    }
-
-    private File getFile(String fileName) throws Exception {
-        return new File(getClass().getResource("/images/"+ fileName + ".jpg").getFile());
-        //return new ClassPathResource("/images/"+ fileName + ".jpg").getFile();
     }
 }
