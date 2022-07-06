@@ -55,7 +55,9 @@ jobs:
       #   run: aws s3 rm s3://${{ env.S3BUCKET }}/ --recursive  
 
       - name: "Run pwd bash"
-        run:  cd build/lib/ | ls
+        run:  cd build/lib/
+      - name: "Run ls bash"
+        run:  ls  
 
       # - name: "Copy JAR to S3"
       #   run: aws s3 sync /home/runner/work/nbtelegramapp/nbtelegramapp/build/lib/*.jar s3://nama-bhiksha
