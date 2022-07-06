@@ -61,4 +61,4 @@ jobs:
       #   run: "aws s3 cp /libs/*.jar s3://${{ env.S3BUCKET }}/"
       #   working-directory: "${{ env.applicationfolder }}/build"
 
-      C:\Projects\nbtelegramapp\build\libs\nbtelegramapp-0.0.1-SNAPSHOT.jar
+      #C:\Projects\nbtelegramapp\build\libs\nbtelegramapp-0.0.1-SNAPSHOT.jar
