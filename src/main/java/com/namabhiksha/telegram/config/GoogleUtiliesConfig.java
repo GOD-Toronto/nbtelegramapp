@@ -10,7 +10,9 @@ import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.namabhiksha.telegram.schedulers.AnnouncementsScheduler;
+import com.namabhiksha.telegram.schedulers.CommonUtil;
 import com.namabhiksha.telegram.schedulers.NamaSlotsScheduler;
+import com.namabhiksha.telegram.schedulers.VolunteerTasksScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -83,14 +85,28 @@ public class GoogleUtiliesConfig {
     }
 
     @Bean
+    public CommonUtil getCommonUtil() {
+        return new CommonUtil();
+    }
+
+    @Bean
     public NamaSlotsScheduler namaSlotsScheduler(@Autowired Calendar calendar,
-                                                      @Autowired Drive drive){
-        return new NamaSlotsScheduler(calendar, drive);
+                                                      @Autowired Drive drive,
+                                                 @Autowired CommonUtil commonUtil){
+        return new NamaSlotsScheduler(calendar, drive, commonUtil);
     }
 
     @Bean
     public AnnouncementsScheduler announcementsScheduler(@Autowired Calendar calendar,
-                                                          @Autowired Drive drive){
-        return new AnnouncementsScheduler(calendar, drive);
+                                                          @Autowired Drive drive,
+                                                         @Autowired CommonUtil commonUtil){
+        return new AnnouncementsScheduler(calendar, drive, commonUtil);
+    }
+
+    @Bean
+    public VolunteerTasksScheduler volunteerTasksScheduler(@Autowired Calendar calendar,
+                                                          @Autowired Drive drive,
+                                                           @Autowired CommonUtil commonUtil){
+        return new VolunteerTasksScheduler(calendar, drive, commonUtil);
     }
 }
