@@ -58,7 +58,7 @@ jobs:
         run: pwd
 
       - name: "Run ls bash"
-        run: ls -al
+        run: ls -al build/lib/
 
       # - name: "Copy JAR to S3"
       #   run: aws s3 sync /home/runner/work/nbtelegramapp/nbtelegramapp/build/lib/*.jar s3://nama-bhiksha
