@@ -27,6 +27,7 @@ public class MultipartHelper {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             String urlStringPhoto = createUrlString(apiToken, CalendarConstants.TELEGRAM_SEND_PHOTO, telegramUrl);
             StringBody chatid = new StringBody(chatidentifier, ContentType.TEXT_PLAIN);
+
             StringBody captionTxt = createCaption(cptMessage, zoomUrl, false);
             // sending a photo
             HttpPost httppost = new HttpPost(urlStringPhoto);
@@ -42,12 +43,14 @@ public class MultipartHelper {
                     .build();
 
             sendInstruction(httpclient, httppost, reqEntity);
+
             log.info("processPhoto::File name: [{}], deleted status:[{}}", file.getName(), file.delete());
         }
     }
 
     public static void processMusic(String chatidentifier, String apiToken, String fileName, String cptMessage, String telegramUrl, String zoomUrl)
             throws IOException {
+
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             String urlStringMusic = createUrlString(apiToken, CalendarConstants.TELEGRAM_SEND_AUDIO, telegramUrl);
             StringBody chatid = new StringBody(chatidentifier, ContentType.TEXT_PLAIN);
@@ -68,7 +71,6 @@ public class MultipartHelper {
                     .build();
 
             sendInstruction(httpclient, httppost, reqEntity);
-
             file.delete();
         }
     }
