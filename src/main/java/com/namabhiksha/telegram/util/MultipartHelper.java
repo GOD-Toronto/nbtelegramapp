@@ -22,7 +22,7 @@ public class MultipartHelper {
     private static final Logger log
             = org.apache.logging.log4j.LogManager.getLogger(MultipartHelper.class);
 
-    public static void processPhoto(String chatidentifier, String apiToken, File file, String cptMessage, String telegramUrl, String zoomUrl)
+    public static void processPhoto(String chatidentifier, String apiToken, String fileName, String cptMessage, String telegramUrl, String zoomUrl)
             throws IOException {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             String urlStringPhoto = createUrlString(apiToken, CalendarConstants.TELEGRAM_SEND_PHOTO, telegramUrl);
@@ -31,7 +31,7 @@ public class MultipartHelper {
             // sending a photo
             HttpPost httppost = new HttpPost(urlStringPhoto);
 
-            FileBody bin = new FileBody(file);
+            FileBody bin = new FileBody(new File(fileName));
             StringBody parseMode = new StringBody("HTML", ContentType.TEXT_PLAIN);
             HttpEntity reqEntity = MultipartEntityBuilder.create()
                     .addPart("chat_id", chatid)
@@ -111,6 +111,19 @@ public class MultipartHelper {
         if (cptMessage != null && cptMessage.length() > 0) {
             return new StringBody("<b><a href=\"" + zoomUrl + "\">" + cptMessage + "</a></b>",
                     ContentType.TEXT_PLAIN);
+        } else {
+            return new StringBody("", ContentType.TEXT_PLAIN);
+        }
+    }
+
+    private static StringBody createCaption(String cptMessage, String url, boolean needLink) {
+        if (cptMessage != null && cptMessage.length() > 0) {
+            if (needLink) {
+                return new StringBody("<b><a href=\"" + url + "\">" + cptMessage + "</a></b>",
+                        ContentType.TEXT_PLAIN);
+            } else {
+                return new StringBody(cptMessage, ContentType.TEXT_PLAIN);
+            }
         } else {
             return new StringBody("", ContentType.TEXT_PLAIN);
         }

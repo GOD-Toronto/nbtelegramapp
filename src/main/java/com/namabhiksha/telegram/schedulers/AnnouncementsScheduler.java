@@ -6,6 +6,7 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttachment;
 import com.google.api.services.calendar.model.Events;
 import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File;
 import com.namabhiksha.telegram.util.CalendarConstants;
 import com.namabhiksha.telegram.util.MessageBuilder;
 import com.namabhiksha.telegram.util.MultipartHelper;
@@ -13,7 +14,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.io.File;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.namabhiksha.telegram.util.CalendarConstants.AMERICA_TORONTO;
 import static com.namabhiksha.telegram.util.CalendarConstants.START_TIME;
+import static org.springframework.util.ResourceUtils.getFile;
 
 public class AnnouncementsScheduler {
 
@@ -95,12 +98,24 @@ public class AnnouncementsScheduler {
                 // either the event has posters or just the text..
                 if (eventAttachItemsOptional.isPresent()) {
                     List<EventAttachment> eventAttachments = event.getAttachments();
+                    EventAttachment eventAttach = event.getAttachments().get(0);
+                    String fileId = eventAttach.getFileId();
                     if (!eventAttachments.isEmpty()) {
                         description = MessageBuilder.removeHTMLBlob(event.getDescription());
                         log.info(description);
+
+                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+                        File file = drive.files().get(fileId).execute();
+                        String fileName = file.getName();
+                        drive.files().get(fileId).executeMediaAndDownloadTo(outputStream);
+
+                        FileOutputStream outputfile = new FileOutputStream(fileName);
+                        outputStream.writeTo(outputfile);
+
                         MultipartHelper.processPhoto(chatId,
                                 apiToken,
-                                getFile(event.getSummary()),
+                                fileName,
                                 description,
                                 telegramURL,
                                 zoomUrl);
@@ -118,10 +133,5 @@ public class AnnouncementsScheduler {
                 parsedTimeSlots.add(event.getId());
             }
         }
-    }
-
-    private File getFile(String fileName) throws Exception {
-        return new File(getClass().getResource("/images/"+ fileName + ".jpg").getFile());
-        //return new ClassPathResource("/images/"+ fileName + ".jpg").getFile();
     }
 }

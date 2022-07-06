@@ -26,21 +26,11 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j:2.17.2'
 }
 
-task copynonJavafile {
-    copy{
-        from("src"){
-            include '**/*.jpg' }
-        into("build/classes/images")
-    }
-}
-
 bootJar {
     manifest {
         attributes 'Start-Class': 'com.namabhiksha.telegram.TelegramApplication'
     }
 }
-
-jar.dependsOn copynonJavafile
 
 tasks.named('test') {
     useJUnitPlatform()

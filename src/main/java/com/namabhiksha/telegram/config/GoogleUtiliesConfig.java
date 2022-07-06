@@ -20,6 +20,7 @@ import org.springframework.core.io.ClassPathResource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -37,6 +38,8 @@ public class GoogleUtiliesConfig {
     private static final String APPLICATION_NAME = "CalendarUtility";
     /** Global instance of the JSON factory. */
 
+    private final List<String> scopes = Arrays.asList(DriveScopes.DRIVE, CalendarScopes.CALENDAR);
+
     @Bean
     public NetHttpTransport getHttpTransport() throws GeneralSecurityException, IOException {
         return GoogleNetHttpTransport.newTrustedTransport();
@@ -48,10 +51,8 @@ public class GoogleUtiliesConfig {
     }
 
     private GoogleCredential getCredentials(@Autowired NetHttpTransport httpTransport,
-                                            @Autowired JsonFactory jsonFactory,
-                                            List<String> scopes) throws IOException, GeneralSecurityException {
+                                            @Autowired JsonFactory jsonFactory) throws IOException, GeneralSecurityException {
         InputStream is = new ClassPathResource(serviceAccountPrivateKey).getInputStream();
-       // File credentials = new File("config/godcanada-354600-18c327645dec.p12");
         return new GoogleCredential.Builder()
                 .setTransport(httpTransport)
                 .setJsonFactory(jsonFactory)
@@ -64,7 +65,7 @@ public class GoogleUtiliesConfig {
     @Bean
     public Calendar googleCalendar(@Autowired NetHttpTransport httpTransport,
                                    @Autowired JsonFactory jsonFactory) throws GeneralSecurityException, IOException {
-        GoogleCredential googleCredential = getCredentials(httpTransport, jsonFactory, Collections.singletonList(CalendarScopes.CALENDAR));
+        GoogleCredential googleCredential = getCredentials(httpTransport, jsonFactory);
         return new Calendar.Builder(httpTransport, jsonFactory, googleCredential)
                 .setApplicationName(APPLICATION_NAME)
                 .setHttpRequestInitializer(googleCredential)
@@ -74,13 +75,7 @@ public class GoogleUtiliesConfig {
     @Bean
     public Drive googleDrive(@Autowired NetHttpTransport httpTransport,
                              @Autowired JsonFactory jsonFactory) throws GeneralSecurityException, IOException {
-        GoogleCredential googleCredential = getCredentials(httpTransport, jsonFactory,
-                Arrays.asList(DriveScopes.DRIVE_READONLY,
-                        DriveScopes.DRIVE_METADATA_READONLY,
-                        DriveScopes.DRIVE,
-                        DriveScopes.DRIVE_FILE,
-                        DriveScopes.DRIVE_PHOTOS_READONLY,
-                        DriveScopes.DRIVE_METADATA));
+        GoogleCredential googleCredential = getCredentials(httpTransport, jsonFactory);
         return new Drive.Builder(httpTransport, jsonFactory, googleCredential)
                 .setApplicationName(APPLICATION_NAME)
                 .setHttpRequestInitializer(googleCredential)
