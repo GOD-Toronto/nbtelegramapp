@@ -27,7 +27,7 @@ public class MultipartHelper {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             String urlStringPhoto = createUrlString(apiToken, CalendarConstants.TELEGRAM_SEND_PHOTO, telegramUrl);
             StringBody chatid = new StringBody(chatidentifier, ContentType.TEXT_PLAIN);
-            StringBody captionTxt = createCaption(cptMessage, zoomUrl, telegramUrl);
+            StringBody captionTxt = createCaption(cptMessage, zoomUrl, false);
             // sending a photo
             HttpPost httppost = new HttpPost(urlStringPhoto);
 
