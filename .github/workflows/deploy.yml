@@ -66,8 +66,8 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
           ssh -i private_key.pem ${USER_NAME}@${HOSTNAME}'
-          cd namabhiksha/ && 
-          ps -ef|grep java
+          hostname
+          pwd
           '
       #  ./.github/scripts/test.sh
           
