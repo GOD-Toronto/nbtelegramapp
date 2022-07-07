@@ -35,7 +35,7 @@ public class VolunteerTasksScheduler {
         this.parsedTimeSlots = new HashSet<>();
     }
 
-    @Scheduled(fixedRateString = "${util.volunteers.schedule-time}", timeUnit = TimeUnit.MINUTES, zone = AMERICA_TORONTO)
+    @Scheduled(cron = "${util.volunteers.cron-expression}", zone = AMERICA_TORONTO)
     public void run() throws Exception {
         log.info("run::run invoked");
         commonUtil.getEvents(maxTimeCheck, calendar, calendarIdValue,

@@ -24,8 +24,6 @@ public class NamaSlotsScheduler {
     @Value("${util.nama-slots.max-check-time}")
     private long maxTimeCheck;
 
-
-
     private static final Logger log
             = org.apache.logging.log4j.LogManager.getLogger(NamaSlotsScheduler.class);
 
@@ -36,7 +34,7 @@ public class NamaSlotsScheduler {
         this.parsedTimeSlots = new HashSet<>();
     }
 
-    @Scheduled(fixedRateString = "${util.nama-slots.schedule-time}", timeUnit = TimeUnit.MINUTES, zone = AMERICA_TORONTO)
+    @Scheduled(cron = "${util.nama-slots.cron-expression}", zone = AMERICA_TORONTO)
     public void run() throws Exception {
         log.info("run::run invoked");
         commonUtil.getEvents(maxTimeCheck, calendar, calendarIdValue,

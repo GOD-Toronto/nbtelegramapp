@@ -44,7 +44,7 @@ public class CommonUtil {
         DateTime ctimemax = new DateTime(currentMilliSeconds + milliseconds);
 
         Events events = calendar.events().list(calendarIdValue)
-                .setMaxResults(1)
+                .setMaxResults(2)
                 .setTimeMin(ctimemin)
                 .setTimeMax(ctimemax)
                 .setTimeZone(AMERICA_TORONTO)
