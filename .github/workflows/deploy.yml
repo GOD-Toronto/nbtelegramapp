@@ -67,7 +67,9 @@ jobs:
           echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
           echo "${USER_NAME}@${HOSTNAME}"'
           ssh -i private_key.pem ${USER_NAME}@${HOSTNAME}          
-          rm -rf private_key.pem'
+          rm -rf private_key.pem
+          sh ./.github/scripts/test.sh
+          '
       #  ./.github/scripts/test.sh
           
       #     rm -rf private_key.pem
