@@ -8,37 +8,33 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import static com.namabhiksha.telegram.util.CalendarConstants.AMERICA_TORONTO;
 
-public class AnnouncementsScheduler {
+public class TestSlotsScheduler {
     private final Calendar calendar;
     private final Drive drive;
     private final CommonUtil commonUtil;
     private final Set<String> parsedTimeSlots;
-
-    @Value("${util.announcements.calendar-id}")
+    @Value("${util.nama-slots.calendar-id}")
     private String calendarIdValue;
-    @Value("${util.announcements.chat-id}")
+    @Value("${util.nama-slots.chat-id}")
     private String chatId;
-    @Value("${util.announcements.max-check-time}")
+    @Value("${util.nama-slots.max-check-time}")
     private long maxTimeCheck;
 
     private static final Logger log
-            = org.apache.logging.log4j.LogManager.getLogger(AnnouncementsScheduler.class);
+            = org.apache.logging.log4j.LogManager.getLogger(TestSlotsScheduler.class);
 
-    public AnnouncementsScheduler(Calendar calendar, Drive drive, CommonUtil commonUtil) {
+    public TestSlotsScheduler(Calendar calendar, Drive drive, CommonUtil commonUtil) {
         this.calendar = calendar;
         this.drive = drive;
         this.commonUtil = commonUtil;
         this.parsedTimeSlots = new HashSet<>();
     }
 
-    @Scheduled(cron = "${util.announcements.cron-expression}", zone = AMERICA_TORONTO)
+    @Scheduled(cron = "${util.nama-slots.cron-expression}", zone = AMERICA_TORONTO)
     public void run() throws Exception {
         log.info("run::run invoked");
-        commonUtil.getEvents(maxTimeCheck, calendar, calendarIdValue,
-                parsedTimeSlots, drive, chatId);
     }
 }

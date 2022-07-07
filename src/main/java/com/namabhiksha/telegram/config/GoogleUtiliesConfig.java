@@ -9,14 +9,12 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
-import com.namabhiksha.telegram.schedulers.AnnouncementsScheduler;
-import com.namabhiksha.telegram.schedulers.CommonUtil;
-import com.namabhiksha.telegram.schedulers.NamaSlotsScheduler;
-import com.namabhiksha.telegram.schedulers.VolunteerTasksScheduler;
+import com.namabhiksha.telegram.schedulers.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -89,6 +87,7 @@ public class GoogleUtiliesConfig {
         return new CommonUtil();
     }
 
+    @Profile("!backendtest")
     @Bean
     public NamaSlotsScheduler namaSlotsScheduler(@Autowired Calendar calendar,
                                                       @Autowired Drive drive,
@@ -96,6 +95,7 @@ public class GoogleUtiliesConfig {
         return new NamaSlotsScheduler(calendar, drive, commonUtil);
     }
 
+    @Profile("!backendtest")
     @Bean
     public AnnouncementsScheduler announcementsScheduler(@Autowired Calendar calendar,
                                                           @Autowired Drive drive,
@@ -103,10 +103,21 @@ public class GoogleUtiliesConfig {
         return new AnnouncementsScheduler(calendar, drive, commonUtil);
     }
 
+
+
+    @Profile("!backendtest")
     @Bean
     public VolunteerTasksScheduler volunteerTasksScheduler(@Autowired Calendar calendar,
                                                           @Autowired Drive drive,
                                                            @Autowired CommonUtil commonUtil){
         return new VolunteerTasksScheduler(calendar, drive, commonUtil);
+    }
+
+    @Profile("backendtest")
+    @Bean
+    public TestSlotsScheduler testSlotsScheduler(@Autowired Calendar calendar,
+                                                      @Autowired Drive drive,
+                                                      @Autowired CommonUtil commonUtil){
+        return new TestSlotsScheduler(calendar, drive, commonUtil);
     }
 }
