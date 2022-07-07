@@ -1,8 +1,8 @@
 #!/bin/bash
 
-kiperf=$(pidof java)
-
 cd namabhiksha
+
+kiperf=$(pidof java)
 
 if [[ -z $kiperf ]]; then
   echo "java process not running..."
