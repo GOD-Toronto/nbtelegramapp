@@ -48,19 +48,30 @@ jobs:
       - name: Build and analyze
         run: ./gradlew build --info
 
-      # - name: "Copy Artifact to superceded s3"    
-      #   run: "aws s3 cp s3://${{ env.S3BUCKET }}/nbtelegramapp-0.0.1-SNAPSHOT.jar s3://${{ env.S3BUCKET }}/superceded/"
-
       - name: "clear the s3 bucket"
         run: aws s3 rm s3://${{ env.S3BUCKET }}/ --recursive  
 
       - name: "Copy JAR to S3"
         run: aws s3 sync ./build/libs/ s3://nama-bhiksha
 
-      # - name: "Upload Artifact to s3"
-      #   run: "aws s3 cp /libs/*.jar s3://${{ env.S3BUCKET }}/"
-      #   working-directory: "${{ env.applicationfolder }}/build"
+      - name: Get Github action IP
+        id: ip
+        uses: haythem/public-ip@v1.2 
 
-      #C:\Projects\nbtelegramapp\build\libs\nbtelegramapp-0.0.1-SNAPSHOT.jar
-
-      #/home/runner/work/nbtelegramapp/nbtelegramapp/build/lib/nbtelegramapp-0.0.1-SNAPSHOT.jar
+      - name: Deploy on AWS EC2
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY  }}
+          HOSTNAME: ${{ secrets.HOSTNAME  }}
+          USER_NAME: ${{ secrets.USERNAME  }}
+        run: |
+          echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER_NAME}@${HOSTNAME} ' 
+          ./.github/scripts/test.sh
+          '
+      #     rm -rf private_key.pem
+      # - name: Remove github actions IP from security group
+      #   env:
+      #     AWS_SECURITY_GROUP: ${{ secrets.AWS_SECURITY_GROUP }}
+      #   run: |
+      #     aws ec2 revoke-security-group-ingress --group-id ${{ env.AWS_SECURITY_GROUP }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/16
+      #   if: always()
