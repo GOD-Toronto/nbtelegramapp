@@ -44,7 +44,7 @@ jobs:
         run: ./gradlew build --info
 
       - name: Run bash script
-        run: sh ./.github/scripts/deploy.sh > log.txt
+        run: sh ./.github/scripts/deploy.sh
 
       - name: Run online command
         run: |
