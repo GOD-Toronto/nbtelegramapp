@@ -1,6 +1,9 @@
 #!/bin/bash
 
-ls
+echo ls
+test=hostname
+
+echo $hostname
 
 
 # kiperf=$(pidof java)
