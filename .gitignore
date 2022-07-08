@@ -7,3 +7,6 @@
 /.idea/misc.xml
 /.idea/vcs.xml
 /.idea/workspace.xml
+/.idea/runConfigurations/
+/src/main/resources/application-backendtest.yml
+/src/main/resources/backendtest.json
