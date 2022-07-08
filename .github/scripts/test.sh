@@ -5,12 +5,12 @@ ls
 java -version
 aws s3 ls
 
-# kiperf=$(pidof java)
+kiperf=$(pidof java)
 
-# cd namabhiksha
+cd namabhiksha
 
-# if [[ -z $kiperf ]]; then
-#   echo "java process not running..."
-# else
-#   echo "JAVA process is running..."
-# fi
+if [[ -z $kiperf ]]; then
+  echo "java process not running..."
+else
+  echo "JAVA process is running..."
+fi
