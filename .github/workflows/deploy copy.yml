@@ -24,7 +24,8 @@ jobs:
           USER_NAME: ${{ secrets.USERNAME  }}
         run: | 
             echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
-            ls
+            ls -a
+            ping 3.99.135.206
             echo "trying to logging into EC2..."
             ssh -i private_key.pem ${USER_NAME}@${HOSTNAME}
 
@@ -34,6 +35,9 @@ jobs:
       - name: Run online command
         run: |
             echo Folder contents
+            ls -a
+            rm -rf private_key.pem
+            echo "deleted the pem file"
             ls -a
 
 
