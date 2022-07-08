@@ -43,6 +43,7 @@ jobs:
         run: | 
             echo "$PRIVATE_KEY" > private_key.pem && chmod 400 private_key.pem
             ls -al
+            cat private_key.pem
             echo "trying to logging into EC2..."
             ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER_NAME}@${HOSTNAME}
             # # git clone https://github.com/GOD-Toronto/nbtelegramapp.git
