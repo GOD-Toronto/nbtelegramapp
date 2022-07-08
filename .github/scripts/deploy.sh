@@ -23,14 +23,14 @@ pwd
 cd /home/ec2-user/namabhiksha
 # nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva &
 
-sudo su nobody -c "nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva &"
+sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva &
 
 sleep 10
 javapid=$(pidof java)
 
 echo "java pid: $javapid"
 
-ps -ef|grep java
+ps -AUX|grep java
 
 if [[ -z $javapid ]]; then
   echo "java process did not start"
