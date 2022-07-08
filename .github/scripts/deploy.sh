@@ -2,6 +2,8 @@
 
 cd ./build/libs/
 
+cp nbtelegramapp-0.0.1-SNAPSHOT.jar /home/ec2-user/namabhiksha
+
 kiperf=$(pidof java)
 
 if [[ -z $kiperf ]]; then
@@ -18,6 +20,7 @@ echo "Bringing the App up"
 
 pwd
 
+cd /home/ec2-user/namabhiksha
 sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva &
 
 sleep 10
