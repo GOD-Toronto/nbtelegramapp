@@ -7,5 +7,5 @@ util:
   zoom-url: https://us02web.zoom.us/j/7629526122?pwd=RWo2VmFMRmNzcS9VblF1OEpEUkI0Zz09
 
 service-account:
-  json: godcanada-354600-cf3f9d413f24.json
+  json: sa.json
   email: namabhiksha@godcanada-354600.iam.gserviceaccount.com

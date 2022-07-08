@@ -11,7 +11,6 @@ import com.namabhiksha.telegram.util.CalendarConstants;
 import com.namabhiksha.telegram.util.MessageBuilder;
 import com.namabhiksha.telegram.util.MultipartHelper;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -24,20 +23,29 @@ import static com.namabhiksha.telegram.util.CalendarConstants.AMERICA_TORONTO;
 import static com.namabhiksha.telegram.util.CalendarConstants.START_TIME;
 
 public class CommonUtil {
-    @Value("${util.telegram-url}")
-    private String telegramURL;
-
-    @Value("${util.api-token}")
-    private String apiToken;
-
-    @Value("${util.zoom-url}")
-    private String zoomUrl;
+    private final Calendar calendar;
+    private final Drive drive;
+    private final String telegramURL;
+    private final String apiToken;
+    private final String zoomLinkText;
 
     private static final Logger log
             = org.apache.logging.log4j.LogManager.getLogger(CommonUtil.class);
 
-    public void getEvents(long milliseconds, Calendar calendar, String calendarIdValue,
-                                 Set<String> parsedTimeSlots, Drive drive, String chatId) throws Exception {
+    public CommonUtil(Drive drive,
+                      Calendar calendar,
+                      String telegramURL,
+                      String apiToken,
+                      String zoomLinkText) {
+        this.drive = drive;
+        this.calendar = calendar;
+        this.telegramURL = telegramURL;
+        this.apiToken = apiToken;
+        this.zoomLinkText = zoomLinkText;
+    }
+
+    public void getEvents(long milliseconds, String calendarIdValue,
+                                 Set<String> parsedTimeSlots, String chatId) throws Exception {
         log.info("getEvents");
         long currentMilliSeconds = System.currentTimeMillis();
         DateTime ctimemin = new DateTime(currentMilliSeconds);
@@ -60,9 +68,11 @@ public class CommonUtil {
             for (Event event : items) {
 
                 if (event.getSummary().contains(CalendarConstants.LAST_SLOT)) {
+                    log.info("getEvents::Self cleaning the data structures");
                     parsedTimeSlots.clear();
                     continue;
                 } else if (parsedTimeSlots.contains(event.getId())) {
+                    log.info("getEvents::No new events to be notified");
                     continue;
                 }
 
@@ -100,10 +110,10 @@ public class CommonUtil {
                             fileName,
                             description,
                             telegramURL,
-                            zoomUrl);
+                            zoomLinkText);
 
                 } else {
-                    plainTextMessage(chatId, apiToken, telegramURL, zoomUrl, event);
+                    plainTextMessage(chatId, event);
                 }
 
                 parsedTimeSlots.add(event.getId());
@@ -111,7 +121,7 @@ public class CommonUtil {
         }
     }
 
-    private void plainTextMessage(String chatId, String apiToken, String telegramURL, String zoomUrl, Event event) throws IOException {
+    private void plainTextMessage(String chatId, Event event) throws IOException {
         String description = MessageBuilder.removeHTMLBlob(event.getDescription());
 
         log.info("plainTextMessage::description = [{}]", description);
@@ -120,7 +130,7 @@ public class CommonUtil {
                 apiToken,
                 description,
                 telegramURL,
-                zoomUrl);
+                zoomLinkText);
     }
 
 }

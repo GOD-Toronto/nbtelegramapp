@@ -10,11 +10,11 @@ import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.namabhiksha.telegram.schedulers.*;
+import com.namabhiksha.telegram.util.CalendarConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -29,6 +29,16 @@ public class GoogleUtiliesConfig {
 
     @Value("${service-account.email}")
     private String serviceAccountEmail;
+
+    @Value("${util.telegram-url}")
+    private String telegramURL;
+
+    @Value("${util.api-token}")
+    private String apiToken;
+
+    @Value("${util.zoom-url}")
+    private String zoomUrl;
+
 
     /** Application name. */
     private static final String APPLICATION_NAME = "CalendarUtility";
@@ -83,41 +93,29 @@ public class GoogleUtiliesConfig {
     }
 
     @Bean
-    public CommonUtil getCommonUtil() {
-        return new CommonUtil();
+    public CommonUtil getCommonUtil(@Autowired Drive drive,
+                                    @Autowired Calendar calendar) {
+        final StringBuilder zoomLinkTextBuilder = new StringBuilder();
+        zoomLinkTextBuilder.append("\n");
+        zoomLinkTextBuilder.append("-------------------");
+        zoomLinkTextBuilder.append("\n");
+        zoomLinkTextBuilder.append(CalendarConstants.PLEASE_JOIN);
+        zoomLinkTextBuilder.append("<a href=\"" + zoomUrl + "\">" + zoomUrl + "</a>");
+        return new CommonUtil(drive, calendar, telegramURL, apiToken, zoomLinkTextBuilder.toString());
     }
 
-    @Profile("!backendtest")
     @Bean
-    public NamaSlotsScheduler namaSlotsScheduler(@Autowired Calendar calendar,
-                                                      @Autowired Drive drive,
-                                                 @Autowired CommonUtil commonUtil){
-        return new NamaSlotsScheduler(calendar, drive, commonUtil);
+    public NamaSlotsScheduler namaSlotsScheduler(@Autowired CommonUtil commonUtil) {
+        return new NamaSlotsScheduler(commonUtil);
     }
 
-    @Profile("!backendtest")
     @Bean
-    public AnnouncementsScheduler announcementsScheduler(@Autowired Calendar calendar,
-                                                          @Autowired Drive drive,
-                                                         @Autowired CommonUtil commonUtil){
-        return new AnnouncementsScheduler(calendar, drive, commonUtil);
+    public AnnouncementsScheduler announcementsScheduler(@Autowired CommonUtil commonUtil){
+        return new AnnouncementsScheduler(commonUtil);
     }
 
-
-
-    @Profile("!backendtest")
     @Bean
-    public VolunteerTasksScheduler volunteerTasksScheduler(@Autowired Calendar calendar,
-                                                          @Autowired Drive drive,
-                                                           @Autowired CommonUtil commonUtil){
-        return new VolunteerTasksScheduler(calendar, drive, commonUtil);
-    }
-
-    @Profile("backendtest")
-    @Bean
-    public TestSlotsScheduler testSlotsScheduler(@Autowired Calendar calendar,
-                                                      @Autowired Drive drive,
-                                                      @Autowired CommonUtil commonUtil){
-        return new TestSlotsScheduler(calendar, drive, commonUtil);
+    public VolunteerTasksScheduler volunteerTasksScheduler(@Autowired CommonUtil commonUtil){
+        return new VolunteerTasksScheduler(commonUtil);
     }
 }

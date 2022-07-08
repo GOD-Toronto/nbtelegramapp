@@ -22,12 +22,17 @@ public class MultipartHelper {
     private static final Logger log
             = org.apache.logging.log4j.LogManager.getLogger(MultipartHelper.class);
 
-    public static void processPhoto(String chatidentifier, String apiToken, String fileName, String cptMessage, String telegramUrl, String zoomUrl)
+    public static void processPhoto(String chatidentifier,
+                                    String apiToken,
+                                    String fileName,
+                                    String cptMessage,
+                                    String telegramUrl,
+                                    String zoomLinkText)
             throws IOException {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             String urlStringPhoto = createUrlString(apiToken, CalendarConstants.TELEGRAM_SEND_PHOTO, telegramUrl);
             StringBody chatid = new StringBody(chatidentifier, ContentType.TEXT_PLAIN);
-            StringBody captionTxt = createCaption(cptMessage, zoomUrl, false);
+            StringBody captionTxt = createCaption(cptMessage, zoomLinkText, true);
             // sending a photo
             HttpPost httppost = new HttpPost(urlStringPhoto);
 
@@ -46,7 +51,7 @@ public class MultipartHelper {
         }
     }
 
-    public static void processMusic(String chatidentifier, String apiToken, String fileName, String cptMessage, String telegramUrl, String zoomUrl)
+    public static void processMusic(String chatidentifier, String apiToken, String fileName, String cptMessage, String telegramUrl, String zoomLinkText)
             throws IOException {
 
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
@@ -70,11 +75,11 @@ public class MultipartHelper {
 
             sendInstruction(httpclient, httppost, reqEntity);
 
-            file.delete();
+            log.info("processMusic::File name: [{}], deleted status:[{}}", file.getName(), file.delete());
         }
     }
 
-    public static void processTextMessage(String chatidentifier, String apiToken, String msgTxt, String telegramUrl, String zoomUrl) throws IOException {
+    public static void processTextMessage(String chatidentifier, String apiToken, String msgTxt, String telegramUrl, String zoomLinkText) throws IOException {
 
         // compose the url
 
@@ -110,20 +115,13 @@ public class MultipartHelper {
         }
     }
 
-    private static StringBody createCaption(String cptMessage, String url, String zoomUrl) {
-        if (cptMessage != null && cptMessage.length() > 0) {
-            return new StringBody("<b><a href=\"" + zoomUrl + "\">" + cptMessage + "</a></b>",
-                    ContentType.TEXT_PLAIN);
-        } else {
-            return new StringBody("", ContentType.TEXT_PLAIN);
-        }
-    }
-
-    private static StringBody createCaption(String cptMessage, String url, boolean needLink) {
+    private static StringBody createCaption(String cptMessage, String zoomLinkText, boolean needLink) {
         if (cptMessage != null && cptMessage.length() > 0) {
             if (needLink) {
-                return new StringBody("<b><a href=\"" + url + "\">" + cptMessage + "</a></b>",
-                        ContentType.TEXT_PLAIN);
+                StringBuilder captionBuilder = new StringBuilder();
+                captionBuilder.append(cptMessage);
+                captionBuilder.append(zoomLinkText);
+                return new StringBody(captionBuilder.toString(),  ContentType.TEXT_PLAIN);
             } else {
                 return new StringBody(cptMessage, ContentType.TEXT_PLAIN);
             }
