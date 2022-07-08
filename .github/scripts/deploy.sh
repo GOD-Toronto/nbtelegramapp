@@ -30,7 +30,7 @@ javapid=$(pidof java)
 
 echo "java pid: $javapid"
 
-ps -AUX|grep java
+ps -aux|grep java
 
 if [[ -z $javapid ]]; then
   echo "java process did not start"
