@@ -35,8 +35,11 @@ jobs:
       - name: Build and analyze
         run: ./gradlew build --info
 
+      - name: PWD
+        run:  pwd
+
       - name: Copy jar file from libs to namabhiksha folder
-        run:  cp ./build/libs/*.jar /home/ec2-user/namabhiksha
+        run:  cp ./build/libs/*.jar ./namabhiksha
 
       - name: Run bash script
         run: sh ./.github/scripts/test.sh
