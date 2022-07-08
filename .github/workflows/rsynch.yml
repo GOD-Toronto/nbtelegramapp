@@ -17,4 +17,3 @@ jobs:
         remote_host: ${{ secrets.HOSTNAME }}
         remote_user: ${{ secrets.USERNAME }}
         remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
-        rsh: "pwd"
