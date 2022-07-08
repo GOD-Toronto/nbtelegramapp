@@ -1,7 +1,7 @@
 name: "Testing EC2 login"
 on:
   workflow_dispatch:
-  push:
+  # push:
     # branches:
     #   - github_actions
 
