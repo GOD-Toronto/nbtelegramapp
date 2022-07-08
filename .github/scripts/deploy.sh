@@ -12,9 +12,12 @@ else
 fi
 
 echo "Delete the old log file"
-rm *.out
+rm -v *.out
 
 echo "Bringing the App up"
+
+pwd
+
 nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva &
 
 sleep 5
