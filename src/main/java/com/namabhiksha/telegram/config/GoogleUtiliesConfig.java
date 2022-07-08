@@ -6,10 +6,10 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.calendar.Calendar;
-import com.google.api.services.calendar.CalendarScopes;
-import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.DriveScopes;
-import com.namabhiksha.telegram.schedulers.*;
+import com.namabhiksha.telegram.schedulers.AnnouncementsScheduler;
+import com.namabhiksha.telegram.schedulers.CommonUtil;
+import com.namabhiksha.telegram.schedulers.NamaSlotsScheduler;
+import com.namabhiksha.telegram.schedulers.VolunteerTasksScheduler;
 import com.namabhiksha.telegram.util.CalendarConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Configuration;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Configuration
@@ -44,7 +45,7 @@ public class GoogleUtiliesConfig {
     private static final String APPLICATION_NAME = "CalendarUtility";
     /** Global instance of the JSON factory. */
 
-    private final List<String> scopes = Arrays.asList(DriveScopes.DRIVE, CalendarScopes.CALENDAR);
+    private final List<String> scopes = Collections.singletonList("https://www.googleapis.com/auth/calendar.events.public.readonly");
 
     @Bean
     public NetHttpTransport getHttpTransport() throws GeneralSecurityException, IOException {
@@ -82,7 +83,7 @@ public class GoogleUtiliesConfig {
                 .build();
     }
 
-    @Bean
+/*    @Bean
     public Drive googleDrive(@Autowired NetHttpTransport httpTransport,
                              @Autowired JsonFactory jsonFactory) throws GeneralSecurityException, IOException {
         GoogleCredential googleCredential = getCredentials(httpTransport, jsonFactory);
@@ -90,18 +91,17 @@ public class GoogleUtiliesConfig {
                 .setApplicationName(APPLICATION_NAME)
                 .setHttpRequestInitializer(googleCredential)
                 .build();
-    }
+    }*/
 
     @Bean
-    public CommonUtil getCommonUtil(@Autowired Drive drive,
-                                    @Autowired Calendar calendar) {
+    public CommonUtil getCommonUtil(@Autowired Calendar calendar) {
         final StringBuilder zoomLinkTextBuilder = new StringBuilder();
         zoomLinkTextBuilder.append("\n");
         zoomLinkTextBuilder.append("-------------------");
         zoomLinkTextBuilder.append("\n");
         zoomLinkTextBuilder.append(CalendarConstants.PLEASE_JOIN);
         zoomLinkTextBuilder.append("<a href=\"" + zoomUrl + "\">" + zoomUrl + "</a>");
-        return new CommonUtil(drive, calendar, telegramURL, apiToken, zoomLinkTextBuilder.toString());
+        return new CommonUtil(calendar, telegramURL, apiToken, zoomLinkTextBuilder.toString());
     }
 
     @Bean

@@ -24,7 +24,7 @@ public class MultipartHelper {
 
     public static void processPhoto(String chatidentifier,
                                     String apiToken,
-                                    String fileName,
+                                    File file,
                                     String cptMessage,
                                     String telegramUrl,
                                     String zoomLinkText)
@@ -36,7 +36,6 @@ public class MultipartHelper {
             // sending a photo
             HttpPost httppost = new HttpPost(urlStringPhoto);
 
-            File file = new File(fileName);
             FileBody bin = new FileBody(file);
             StringBody parseMode = new StringBody("HTML", ContentType.TEXT_PLAIN);
             HttpEntity reqEntity = MultipartEntityBuilder.create()

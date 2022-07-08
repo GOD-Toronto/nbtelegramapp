@@ -24,6 +24,7 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpmime:4.5.13'
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j
     implementation 'org.apache.logging.log4j:log4j:2.17.2'
+    implementation 'commons-io:commons-io:2.4'
 }
 
 bootJar {
