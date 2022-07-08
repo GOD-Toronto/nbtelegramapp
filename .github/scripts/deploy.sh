@@ -18,13 +18,13 @@ echo "Bringing the App up"
 
 pwd
 
-nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva &
-
-sleep 5
+sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva &
 
 javapid=$(pidof java)
 
 echo "java pid: $javapid"
+
+ps -ef|grep java
 
 if [[ -z $javapid ]]; then
   echo "java process did not start"
