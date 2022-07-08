@@ -43,14 +43,8 @@ jobs:
       - name: Build and analyze
         run: ./gradlew build --info
 
-      - name: PWD
-        run:  pwd
-
-      - name: ls jar files from libs to namabhiksha folder
-        run:  ls ./build/libs/*.jar
-
       - name: Run bash script
-        run: sh ./.github/scripts/deploy.sh
+        run: sh ./.github/scripts/deploy.sh > log.txt
 
       - name: Run online command
         run: |
