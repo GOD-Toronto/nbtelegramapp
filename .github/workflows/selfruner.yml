@@ -47,7 +47,7 @@ jobs:
         run:  pwd
 
       - name: Copy jar file from libs to namabhiksha folder
-        run:  cp ./build/libs/*.jar ./namabhiksha
+        run:  ls ./build/libs/*.jar
 
       - name: Run bash script
         run: sh ./.github/scripts/test.sh
