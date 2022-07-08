@@ -41,12 +41,16 @@ jobs:
           HOSTNAME: ${{ secrets.HOSTNAME  }}
           USER_NAME: ${{ secrets.USERNAME  }}
         run: | 
-            echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
+            echo "$PRIVATE_KEY" > private_key.pem && chmod 400 private_key.pem
             ls -al
             echo "trying to logging into EC2..."
+            ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER_NAME}@${HOSTNAME}
+            # # git clone https://github.com/GOD-Toronto/nbtelegramapp.git
+            # cd namabhiksha
+
             rm -rf private_key.pem
             ls -al
-            # ssh -i private_key.pem ${USER_NAME}@${HOSTNAME}
+
 
 
       - name: Run bash script
