@@ -8,7 +8,7 @@ if [[ -z $kiperf ]]; then
   echo "java process not running..."
 else
   echo "Killing java process..."  
-  kill -9 $kiperf
+  sudo kill -9 $kiperf
 fi
 
 echo "Delete the old log file"
@@ -20,6 +20,7 @@ pwd
 
 sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva &
 
+sleep 10
 javapid=$(pidof java)
 
 echo "java pid: $javapid"
