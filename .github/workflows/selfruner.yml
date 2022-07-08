@@ -46,61 +46,12 @@ jobs:
       - name: PWD
         run:  pwd
 
-      - name: Copy jar file from libs to namabhiksha folder
+      - name: ls jar files from libs to namabhiksha folder
         run:  ls ./build/libs/*.jar
 
       - name: Run bash script
-        run: sh ./.github/scripts/test.sh
+        run: sh ./.github/scripts/deploy.sh
 
       - name: Run online command
         run: |
-            echo Folder contents
-            ls -a
- 
-
-      # - name: "clear the s3 bucket"
-      #   run: aws s3 rm s3://${{ env.S3BUCKET }}/ --recursive  
-
-      # - name: "Copy JAR to S3"
-      #   run: aws s3 sync ./build/libs/ s3://nama-bhiksha
-
-      # - name: Get Github action IP
-      #   id: ip
-      #   uses: haythem/public-ip@v1.2 
-
-      # - name: Add github actions IP to security group
-      #   env:
-      #     AWS_SECURITY_GROUP: ${{ secrets.AWS_SECURITY_GROUP }}
-      #   run: |
-      #     aws ec2 authorize-security-group-ingress --group-id ${{ env.AWS_SECURITY_GROUP }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/16
-      #     sleep 10
-
-      # - name: Deploy on AWS EC2
-      #   env:
-      #     PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY  }}
-      #     HOSTNAME: ${{ secrets.HOSTNAME  }}
-      #     USER_NAME: ${{ secrets.USERNAME  }}
-      #   run: echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
-
-      # - name: Run bash script
-      #   run: sh ./.github/scripts/test.sh
-
-      # - name: Run online command
-      #   run: |
-      #       echo Folder contents
-      #       ls -a
-
-
-#          ssh -i private_key.pem ${USER_NAME}@${HOSTNAME}
-#         hostname
- #         pwd
- #         '
-      #  ./.github/scripts/test.sh
-          
-      #     rm -rf private_key.pem
-      # - name: Remove github actions IP from security group
-      #   env:
-      #     AWS_SECURITY_GROUP: ${{ secrets.AWS_SECURITY_GROUP }}
-      #   run: |
-      #     aws ec2 revoke-security-group-ingress --group-id ${{ env.AWS_SECURITY_GROUP }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/16
-      #   if: always()
+            pwd

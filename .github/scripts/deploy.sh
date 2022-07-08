@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd namabhiksha
+cd ./build/libs/
 
 kiperf=$(pidof java)
 
@@ -11,16 +11,13 @@ else
   kill -9 $kiperf
 fi
 
-echo "Removing the old jar"
-rm -rf *.jar 
-
-echo "Downloading latest jar from S3"
-aws s3 cp s3://nama-bhiksha/nbtelegramapp-0.0.1-SNAPSHOT.jar .
+echo "Delete the old log file"
+rm *.out
 
 echo "Bringing the App up"
 nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva &
 
-sleep 10
+sleep 5
 
 javapid=$(pidof java)
 
