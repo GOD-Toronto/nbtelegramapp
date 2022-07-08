@@ -54,4 +54,4 @@ jobs:
 
       - name: Run online command
         run: |
-            pwd
+            ps -ef|grep java
