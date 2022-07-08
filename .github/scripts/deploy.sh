@@ -21,7 +21,7 @@ echo "Bringing the App up"
 pwd
 
 cd /home/ec2-user/namabhiksha
-sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva &
+nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva &
 
 sleep 10
 javapid=$(pidof java)
