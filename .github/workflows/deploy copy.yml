@@ -1,4 +1,4 @@
-name: "Build and Deploy"
+name: "Testing EC2 login"
 on:
   workflow_dispatch:
   push:
@@ -58,12 +58,15 @@ jobs:
       #   id: ip
       #   uses: haythem/public-ip@v1.2 
 
-      # # - name: Deploy on AWS EC2
-      # #   env:
-      # #     PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY  }}
-      # #     HOSTNAME: ${{ secrets.HOSTNAME  }}
-      # #     USER_NAME: ${{ secrets.USERNAME  }}
-      # #   run: echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
+      - name: Deploy on AWS EC2
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY  }}
+          HOSTNAME: ${{ secrets.HOSTNAME  }}
+          USER_NAME: ${{ secrets.USERNAME  }}
+        run: | 
+            echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
+            echo "trying to logging into EC2..."
+            ssh -i private_key.pem ${USER_NAME}@${HOSTNAME}
 
       - name: Run bash script
         run: sh ./.github/scripts/test.sh
