@@ -25,7 +25,7 @@ jobs:
         run: | 
             echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
             ls -a
-            ping 3.99.135.206
+            echo ping -c 4 3.99.135.206
             echo "trying to logging into EC2..."
             ssh -i private_key.pem ${USER_NAME}@${HOSTNAME}
 
@@ -35,10 +35,10 @@ jobs:
       - name: Run online command
         run: |
             echo Folder contents
-            ls -a
+            ls -al
             rm -rf private_key.pem
             echo "deleted the pem file"
-            ls -a
+            ls -al
 
 
 #          ssh -i private_key.pem ${USER_NAME}@${HOSTNAME}
