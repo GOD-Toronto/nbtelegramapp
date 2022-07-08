@@ -3,6 +3,7 @@
 ls
 
 java -version
+aws s3 ls
 
 # kiperf=$(pidof java)
 

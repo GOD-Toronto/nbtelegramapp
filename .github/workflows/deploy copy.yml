@@ -25,9 +25,9 @@ jobs:
         run: | 
             echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
             ls -a
-            echo ping -c 4 3.99.135.206
+            ping -c 4 3.99.135.206
             echo "trying to logging into EC2..."
-            ssh -i private_key.pem ${USER_NAME}@${HOSTNAME}
+            # ssh -i private_key.pem ${USER_NAME}@${HOSTNAME}
 
       - name: Run bash script
         run: sh ./.github/scripts/test.sh
