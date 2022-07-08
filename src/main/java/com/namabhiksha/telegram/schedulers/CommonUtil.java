@@ -5,16 +5,16 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttachment;
 import com.google.api.services.calendar.model.Events;
-import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.model.File;
 import com.namabhiksha.telegram.util.CalendarConstants;
 import com.namabhiksha.telegram.util.MessageBuilder;
 import com.namabhiksha.telegram.util.MultipartHelper;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
+import org.springframework.core.io.ClassPathResource;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -24,7 +24,6 @@ import static com.namabhiksha.telegram.util.CalendarConstants.START_TIME;
 
 public class CommonUtil {
     private final Calendar calendar;
-    private final Drive drive;
     private final String telegramURL;
     private final String apiToken;
     private final String zoomLinkText;
@@ -32,12 +31,10 @@ public class CommonUtil {
     private static final Logger log
             = org.apache.logging.log4j.LogManager.getLogger(CommonUtil.class);
 
-    public CommonUtil(Drive drive,
-                      Calendar calendar,
+    public CommonUtil(Calendar calendar,
                       String telegramURL,
                       String apiToken,
                       String zoomLinkText) {
-        this.drive = drive;
         this.calendar = calendar;
         this.telegramURL = telegramURL;
         this.apiToken = apiToken;
@@ -45,7 +42,7 @@ public class CommonUtil {
     }
 
     public void getEvents(long milliseconds, String calendarIdValue,
-                                 Set<String> parsedTimeSlots, String chatId) throws Exception {
+                          Set<String> parsedTimeSlots, String chatId) throws Exception {
         log.info("getEvents");
         long currentMilliSeconds = System.currentTimeMillis();
         DateTime ctimemin = new DateTime(currentMilliSeconds);
@@ -92,22 +89,20 @@ public class CommonUtil {
                     description = MessageBuilder.removeHTMLBlob(event.getDescription());
                     log.info("getEvents::description = [{}]", description);
 
-                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                    File file = drive.files().get(fileId).execute();
-                    String fileName = file.getName();
+                    File file = null;
+                    try (InputStream stream = new ClassPathResource(CalendarConstants.IMAGES + event.getSummary()+ CalendarConstants.JPG).getInputStream()) {
 
-                    log.info("getEvents::fileName = [{}]", fileName);
+                        file = new File(event.getSummary());
+                        // convert input stream to file
+                        FileUtils.copyInputStreamToFile(stream, file);
 
-                    drive.files().get(fileId).executeMediaAndDownloadTo(outputStream);
-
-                    FileOutputStream outputfile = new FileOutputStream(fileName);
-                    outputStream.writeTo(outputfile);
-                    outputfile.close();
-                    outputStream.close();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
 
                     MultipartHelper.processPhoto(chatId,
                             apiToken,
-                            fileName,
+                            file,
                             description,
                             telegramURL,
                             zoomLinkText);

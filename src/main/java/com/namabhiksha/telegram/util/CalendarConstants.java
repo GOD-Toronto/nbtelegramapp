@@ -8,4 +8,6 @@ public class CalendarConstants {
     public static final String AMERICA_TORONTO = "America/Toronto";
     public static final String START_TIME = "startTime";
     public static final String PLEASE_JOIN = "Please join: ";
+    public static final String IMAGES = "\\images\\";
+    public static final String JPG = ".jpg";
 }
