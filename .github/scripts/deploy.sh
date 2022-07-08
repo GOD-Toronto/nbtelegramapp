@@ -23,7 +23,7 @@ pwd
 cd /home/ec2-user/namabhiksha
 # nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva &
 
-su nobody -c "nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva &"
+sudo nobody -c "nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva &"
 
 sleep 10
 javapid=$(pidof java)
