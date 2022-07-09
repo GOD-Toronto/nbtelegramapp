@@ -10,4 +10,5 @@ public class CalendarConstants {
     public static final String PLEASE_JOIN = "Please join: ";
     public static final String IMAGES = "\\images\\";
     public static final String JPG = ".jpg";
+    public static final String CONFIG = "\\config\\";
 }

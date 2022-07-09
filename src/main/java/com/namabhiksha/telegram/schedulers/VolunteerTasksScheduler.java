@@ -12,11 +12,11 @@ import static com.namabhiksha.telegram.util.CalendarConstants.AMERICA_TORONTO;
 public class VolunteerTasksScheduler {
     private final CommonUtil commonUtil;
     private final Set<String> parsedTimeSlots;
-    @Value("${util.volunteers.calendar-id}")
+    @Value("${calendars.volunteers.calendar-id}")
     private String calendarId;
-    @Value("${util.volunteers.chat-id}")
+    @Value("${calendars.volunteers.chat-id}")
     private String chatId;
-    @Value("${util.volunteers.max-check-time}")
+    @Value("${calendars.volunteers.max-check-time}")
     private long maxTimeCheck;
 
 
@@ -28,7 +28,7 @@ public class VolunteerTasksScheduler {
         this.parsedTimeSlots = new HashSet<>();
     }
 
-    @Scheduled(cron = "${util.volunteers.cron-expression}", zone = AMERICA_TORONTO)
+    @Scheduled(cron = "${calendars.volunteers.cron-expression}", zone = AMERICA_TORONTO)
     public void run() throws Exception {
         log.info("run::run invoked");
         commonUtil.getEvents(maxTimeCheck, calendarId,

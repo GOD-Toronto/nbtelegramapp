@@ -10,3 +10,4 @@
 /.idea/runConfigurations/
 /src/main/resources/application-*.yml
 /src/main/resources/*.json
+/.run/*.xml
