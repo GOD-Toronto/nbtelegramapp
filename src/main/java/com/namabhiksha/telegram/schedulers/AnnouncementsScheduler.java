@@ -13,11 +13,11 @@ public class AnnouncementsScheduler {
     private final CommonUtil commonUtil;
     private final Set<String> parsedTimeSlots;
 
-    @Value("${util.announcements.calendar-id}")
+    @Value("${calendars.announcements.calendar-id}")
     private String calendarId;
-    @Value("${util.announcements.chat-id}")
+    @Value("${calendars.announcements.chat-id}")
     private String chatId;
-    @Value("${util.announcements.max-check-time}")
+    @Value("${calendars.announcements.max-check-time}")
     private long maxTimeCheck;
 
     private static final Logger log
@@ -28,7 +28,7 @@ public class AnnouncementsScheduler {
         this.parsedTimeSlots = new HashSet<>();
     }
 
-    @Scheduled(cron = "${util.announcements.cron-expression}", zone = AMERICA_TORONTO)
+    @Scheduled(cron = "${calendars.announcements.cron-expression}", zone = AMERICA_TORONTO)
     public void run() throws Exception {
         log.info("run::run invoked");
         commonUtil.getEvents(maxTimeCheck, calendarId,

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -60,7 +61,7 @@ public class GoogleUtiliesConfig {
     private GoogleCredential getCredentials(@Autowired NetHttpTransport httpTransport,
                                             @Autowired JsonFactory jsonFactory) throws IOException, GeneralSecurityException {
 
-        return GoogleCredential.fromStream(this.getClass().getClassLoader().getResourceAsStream(serviceAccountJson))
+        return GoogleCredential.fromStream(new ClassPathResource(CalendarConstants.CONFIG + serviceAccountJson).getInputStream())
                 .createScoped(scopes);
 
      /*   InputStream is = new ClassPathResource(serviceAccountPrivateKey).getInputStream();
