@@ -30,6 +30,7 @@ dependencies {
 }
 
 bootJar {
+    exclude('config/backendtest.json','application-backendtest.yml')
     manifest {
         attributes 'Start-Class': 'com.namabhiksha.telegram.TelegramApplication'
     }
