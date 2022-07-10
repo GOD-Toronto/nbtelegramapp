@@ -1,3 +1,5 @@
+/.DS_Store
+/src/main/resources/.DS_Store
 /.gradle/
 /.idea/modules/
 /.idea/.gitignore

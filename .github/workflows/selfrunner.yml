@@ -1,0 +1,54 @@
+name: "NamaBhiksha: Build Jar and Deploy"
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - github_actions
+
+jobs: 
+  build: 
+    name: "Build and Package"
+    runs-on: self-hosted
+
+    steps: 
+      - uses: actions/checkout@v1
+
+      - name: "Set up JDK 17"
+        uses: actions/setup-java@v2
+        with: 
+          cache: gradle
+          distribution: adopt
+          java-version: 17
+
+      # - uses: actions/cache@v2
+      #   with:
+      #     path: |
+      #       ~/.gradle/caches
+      #       ~/.gradle/wrapper
+      #     key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-gradle-
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Test with Gradle
+        run: ./gradlew clean test
+
+      - name: Build and analyze
+        run: ./gradlew build --info
+
+      - name: Run online command
+        run: |
+             pwd 
+             cd build/libs
+             pwd 
+             ls
+
+
+      # - name: Run bash script
+      #   run: sh ./.github/scripts/deploy.sh
+
+      # - name: Run online command
+      #   run: |
+      #       ps -ef|grep java
