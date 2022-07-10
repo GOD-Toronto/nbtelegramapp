@@ -38,14 +38,6 @@ jobs:
       - name: Build and analyze
         run: ./gradlew build --info
 
-      - name: Run online command
-        run: |
-             pwd 
-             cd build/libs
-             pwd 
-             ls
-
-
       # - name: Run bash script
       #   run: sh ./.github/scripts/deploy.sh
 

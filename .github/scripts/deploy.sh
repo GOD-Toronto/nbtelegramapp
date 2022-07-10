@@ -26,8 +26,8 @@ DateTimeStamp=$(date +%Y-%m-%d_%H-%M-%S)
 logFileName=log+$DateTimeStamp+.log
 sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva > $logFileName 2>&1 &
 
-
 sleep 10
+
 javapid=$(pidof java)
 
 echo "java pid: $javapid"
