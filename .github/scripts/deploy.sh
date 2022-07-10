@@ -18,12 +18,12 @@ rm -v *.out
 
 echo "Bringing the App up"
 
-pwd
+DateTimeStamp=$(date +%Y-%m-%d_%H-%M-%S)
 
 cd /home/ec2-user/namabhiksha
 # nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva &
 
-sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva &
+sudo java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva > log+$DateTimeStamp+.log 2>&1 &
 
 sleep 10
 javapid=$(pidof java)
@@ -31,6 +31,7 @@ javapid=$(pidof java)
 echo "java pid: $javapid"
 
 ps -aux|grep java
+
 
 if [[ -z $javapid ]]; then
   echo "java process did not start"
