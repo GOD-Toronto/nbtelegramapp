@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - github_worklow
+      - github_workflow
 jobs: 
   build: 
     name: "Build and Package"
