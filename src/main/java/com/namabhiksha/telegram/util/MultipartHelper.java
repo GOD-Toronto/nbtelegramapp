@@ -27,8 +27,8 @@ public class MultipartHelper {
                                     String file,
                                     String cptMessage,
                                     String telegramUrl,
-                                    String zoomLinkText)
-            throws IOException {
+                                    String errorAlertChatId,
+                                    String zoomLinkText) {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             String urlStringPhoto = createUrlString(apiToken, CalendarConstants.TELEGRAM_SEND_PHOTO, telegramUrl);
             StringBody chatid = new StringBody(chatidentifier, ContentType.TEXT_PLAIN);
@@ -47,6 +47,9 @@ public class MultipartHelper {
 
             sendInstruction(httpclient, httppost, reqEntity);
             log.info("processPhoto::File name: [{}], deleted status:[{}}", file1.getName(), file1.delete());
+        } catch (IOException ioException) {
+            log.error("processPhoto::{}", ioException.getMessage());
+            processTextMessage(errorAlertChatId, apiToken, ioException.getMessage(), telegramUrl, zoomLinkText);
         }
     }
 
@@ -55,8 +58,8 @@ public class MultipartHelper {
                                     String fileName,
                                     String cptMessage,
                                     String telegramUrl,
-                                    String zoomLinkText)
-            throws IOException {
+                                    String errorAlertChatId,
+                                    String zoomLinkText) {
 
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             String urlStringMusic = createUrlString(apiToken, CalendarConstants.TELEGRAM_SEND_AUDIO, telegramUrl);
@@ -80,13 +83,17 @@ public class MultipartHelper {
             sendInstruction(httpclient, httppost, reqEntity);
 
             log.info("processMusic::File name: [{}], deleted status:[{}}", file.getName(), file.delete());
+        } catch (IOException ioException) {
+            log.error("processMusic::{}", ioException.getMessage());
+            processTextMessage(errorAlertChatId, apiToken, ioException.getMessage(), telegramUrl, zoomLinkText);
         }
     }
 
-    public static void processTextMessage(String chatidentifier, String apiToken, String msgTxt, String telegramUrl, String zoomLinkText) throws IOException {
-
-        // compose the url
-
+    public static void processTextMessage(String chatidentifier,
+                                          String apiToken,
+                                          String msgTxt,
+                                          String telegramUrl,
+                                          String zoomLinkText) {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             String urlStringMessage = createUrlString(apiToken, CalendarConstants.TELEGRAM_SEND_MESSAGE, telegramUrl);
             HttpPost httppost = new HttpPost(urlStringMessage);
@@ -101,11 +108,12 @@ public class MultipartHelper {
                     .build();
 
             sendInstruction(httpclient, httppost, reqEntity);
+        } catch (IOException ioException) {
+            log.error("processTextMessage::{}", ioException.getMessage());
         }
     }
 
-    private static void sendInstruction(CloseableHttpClient httpclient, HttpPost httppost, HttpEntity reqEntity)
-            throws IOException {
+    private static void sendInstruction(CloseableHttpClient httpclient, HttpPost httppost, HttpEntity reqEntity) {
         httppost.setEntity(reqEntity);
 
         try (CloseableHttpResponse response = httpclient.execute(httppost)) {
@@ -116,6 +124,9 @@ public class MultipartHelper {
                 log.info("sendInstruction::Response content length: " + resEntity.getContentLength());
             }
             EntityUtils.consume(resEntity);
+        } catch (IOException ioException) {
+            log.error("sendInstruction::{}", ioException.getMessage());
+
         }
     }
 

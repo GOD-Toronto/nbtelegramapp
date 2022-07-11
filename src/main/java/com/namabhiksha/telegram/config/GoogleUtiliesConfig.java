@@ -33,6 +33,9 @@ public class GoogleUtiliesConfig {
     @Value("${service-account.email}")
     private String serviceAccountEmail;
 
+    @Value("${error-alert.chat-id}")
+    private String errorAlertChatId;
+
     @Value("${util.telegram-url}")
     private String telegramURL;
 
@@ -42,6 +45,8 @@ public class GoogleUtiliesConfig {
     @Value("${util.zoom-url}")
     private String zoomUrl;
 
+    @Value("${util.zoom-url-without-password}")
+    private String zoomUrlWithoutPassword;
 
     /** Application name. */
     private static final String APPLICATION_NAME = "CalendarUtility";
@@ -97,14 +102,19 @@ public class GoogleUtiliesConfig {
     }
 
     @Bean
-    public CommonUtil getCommonUtil(@Autowired Calendar calendar, @Autowired Drive drive) {
+    public CommonUtil getCommonUtil(@Autowired Calendar calendar, @Autowired Drive drive,
+                                    @Value("${error-alert.chat-id}") String errorAlertChatId) {
         final StringBuilder zoomLinkTextBuilder = new StringBuilder();
-        zoomLinkTextBuilder.append("\n");
-        zoomLinkTextBuilder.append("-------------------");
-        zoomLinkTextBuilder.append("\n");
-        zoomLinkTextBuilder.append(CalendarConstants.PLEASE_JOIN);
-        zoomLinkTextBuilder.append("<a href=\"" + zoomUrl + "\">" + zoomUrl + "</a>");
-        return new CommonUtil(calendar, drive, telegramURL, apiToken, zoomLinkTextBuilder.toString());
+        zoomLinkTextBuilder.append("\n")
+                            .append("-------------------")
+                            .append("\n")
+                            .append(CalendarConstants.PLEASE_JOIN)
+                            .append("<a href=\"")
+                            .append(zoomUrl)
+                            .append("\">")
+                            .append(CalendarConstants.ZOOM)
+                            .append("</a>");
+        return new CommonUtil(calendar, drive, telegramURL, apiToken, errorAlertChatId, zoomLinkTextBuilder.toString());
     }
 
     @Bean
