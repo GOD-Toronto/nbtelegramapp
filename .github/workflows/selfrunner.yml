@@ -28,9 +28,9 @@ jobs:
       #     restore-keys: |
       #       ${{ runner.os }}-gradle-
 
-      # - name: Create and move the config file
-      #   env:
-      #     SA_JSON: ${{ secrets.SA_JSON }}
+      - name: Create and move the config file
+        env:
+          SA_JSON: ${{ secrets.SA_JSON }}
         run: | 
             echo "$SA_JSON" > sa.json 
             pwd
