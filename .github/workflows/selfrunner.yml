@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - github_workflow
+      - main
 jobs: 
   build: 
     name: "Build and Package"
@@ -65,9 +66,9 @@ jobs:
             rm *.jar
             mv *.log /home/ec2-user/namabhiksha/logs
 
-      # - name: Run bash script
-      #   run: sh ./.github/scripts/deploy.sh
+      - name: Run bash script
+        run: sh ./.github/scripts/deploy.sh
 
-      # - name: Run online command
-      #   run: |
-      #       ps -ef|grep java
+      - name: Run online command
+        run: |
+            ps -ef|grep java
