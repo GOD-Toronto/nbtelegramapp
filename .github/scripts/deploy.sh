@@ -25,7 +25,7 @@ cd /home/ec2-user/namabhiksha
 # sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva &
 
 DateTimeStamp=$(date +%Y-%m-%d_%H-%M-%S)
-logFileName=log+$DateTimeStamp+.log
+logFileName=log_$DateTimeStamp.log
 sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva > $logFileName 2>&1 &
 
 sleep 15
@@ -40,10 +40,5 @@ if [[ -z $javapid ]]; then
 else
   echo "Application deployed and running...."
 fi
-
-echo "cleaning up......."
-cd /home/ec2-user/actions-runner/_work/nbtelegramapp
-rm -rf nbtelegramapp
-
 
 echo "************** ALL DONE... JAI G!! **************"

@@ -72,3 +72,6 @@ jobs:
       - name: Run online command
         run: |
             ps -ef|grep java
+            echo "cleaning up......."
+            cd /home/ec2-user/actions-runner/_work/nbtelegramapp
+            rm -rf nbtelegramapp
