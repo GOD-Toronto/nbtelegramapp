@@ -10,7 +10,8 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,8 +20,7 @@ import java.io.IOException;
  * Example how to use multipart/form encoded POST request.
  */
 public class MultipartHelper {
-    private static final Logger log
-            = org.apache.logging.log4j.LogManager.getLogger(MultipartHelper.class);
+    private static final Logger log = LoggerFactory.getLogger(MultipartHelper.class);
 
     public static void processPhoto(String chatidentifier,
                                     String apiToken,
@@ -110,7 +110,7 @@ public class MultipartHelper {
 
         try (CloseableHttpResponse response = httpclient.execute(httppost)) {
             log.info("----------------------------------------");
-            log.info(response.getStatusLine());
+            log.info(String.valueOf(response.getStatusLine()));
             HttpEntity resEntity = response.getEntity();
             if (resEntity != null) {
                 log.info("sendInstruction::Response content length: " + resEntity.getContentLength());

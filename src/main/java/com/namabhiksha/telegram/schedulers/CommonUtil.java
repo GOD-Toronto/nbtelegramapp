@@ -9,7 +9,9 @@ import com.google.api.services.drive.Drive;
 import com.namabhiksha.telegram.util.CalendarConstants;
 import com.namabhiksha.telegram.util.MessageBuilder;
 import com.namabhiksha.telegram.util.MultipartHelper;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -28,8 +30,7 @@ public class CommonUtil {
     private final String apiToken;
     private final String zoomLinkText;
 
-    private static final Logger log
-            = org.apache.logging.log4j.LogManager.getLogger(CommonUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(CommonUtil.class);
 
     public CommonUtil(Calendar calendar,
                       Drive drive,
