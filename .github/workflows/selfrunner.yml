@@ -28,15 +28,15 @@ jobs:
       #     restore-keys: |
       #       ${{ runner.os }}-gradle-
 
-      - name: Create and move the config file
-        env:
-          SA_JSON: ${{ secrets.SA_JSON }}
-        run: | 
-            echo "$SA_JSON" > sa.json 
-            pwd
-            mv sa.json ./src/main/resources/config
-            cd ./src/main/resources/config
-            ls -al
+      # - name: Create and move the config file
+      #   env:
+      #     SA_JSON: ${{ secrets.SA_JSON }}
+      #   run: | 
+      #       echo "$SA_JSON" > sa.json 
+      #       pwd
+      #       mv sa.json ./src/main/resources/config
+      #       cd ./src/main/resources/config
+      #       ls -al
 
       - name: Create and move the application-seva yaml  file
         env:
