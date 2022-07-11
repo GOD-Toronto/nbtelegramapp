@@ -28,6 +28,8 @@ public class CommonUtil {
     private final Drive drive;
     private final String telegramURL;
     private final String apiToken;
+
+    private final String errorAlertChatId;
     private final String zoomLinkText;
 
     private static final Logger log = LoggerFactory.getLogger(CommonUtil.class);
@@ -36,11 +38,12 @@ public class CommonUtil {
                       Drive drive,
                       String telegramURL,
                       String apiToken,
-                      String zoomLinkText) {
+                      String errorAlertChatId, String zoomLinkText) {
         this.calendar = calendar;
         this.drive = drive;
         this.telegramURL = telegramURL;
         this.apiToken = apiToken;
+        this.errorAlertChatId = errorAlertChatId;
         this.zoomLinkText = zoomLinkText;
     }
 
@@ -135,6 +138,7 @@ public class CommonUtil {
                             fileName,
                             description,
                             telegramURL,
+                            errorAlertChatId,
                             zoomLinkText);
                     break;
                 case CalendarConstants.AUDIO_MPEG:
@@ -145,6 +149,7 @@ public class CommonUtil {
                             fileName,
                             description,
                             telegramURL,
+                            errorAlertChatId,
                             zoomLinkText);
                     break;
                 default:
@@ -154,7 +159,7 @@ public class CommonUtil {
         }
     }
 
-    private void plainTextMessage(String chatId, Event event) throws IOException {
+    private void plainTextMessage(String chatId, Event event) {
         String description = MessageBuilder.removeHTMLBlob(event.getDescription());
 
         log.info("plainTextMessage::description = [{}]", description);
