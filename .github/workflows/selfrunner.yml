@@ -34,6 +34,7 @@ jobs:
         run: | 
             echo "$SA_JSON" > sa.json 
             mv sa.json ./src/main/resources/config
+            cd src//main/resources/config
             ls -al
 
       - name: Create and move the application-seva yaml  file
@@ -42,6 +43,7 @@ jobs:
         run: | 
             echo "$APPLICATION_SEVA_YAML" > application-seva.yml 
             mv application-seva.yml ./src/main/resources
+            cd src//main/resources
             ls -al
 
 
