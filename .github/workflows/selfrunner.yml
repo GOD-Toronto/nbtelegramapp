@@ -36,6 +36,7 @@ jobs:
             mkdir config
             cd config
             echo "$SA_JSON" > sa.json 
+            cp sa.json /home/ec2-user/tmp
             pwd
             ls -al
 
@@ -48,6 +49,7 @@ jobs:
             pwd
             mv application-seva.yml ./src/main/resources
             cd ./src/main/resources
+            cp application-seva.yml  /home/ec2-user/tmp
             pwd
             ls -al
 
