@@ -59,9 +59,11 @@ jobs:
       - name: Build and analyze
         run: ./gradlew build --info
 
-      - name: Copy the JAR
+      - name: Cleanup the Nambhiksha folder
         run: |
-          cp ./build/libs/*.jar /home/ec2-user/tmp
+            cd /home/ec2-user/namabhiksha
+            rm *.jar
+            mv *.log /home/ec2-user/namabhiksha/logs
 
       # - name: Run bash script
       #   run: sh ./.github/scripts/deploy.sh
