@@ -5,16 +5,15 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttachment;
 import com.google.api.services.calendar.model.Events;
+import com.google.api.services.drive.Drive;
 import com.namabhiksha.telegram.util.CalendarConstants;
 import com.namabhiksha.telegram.util.MessageBuilder;
 import com.namabhiksha.telegram.util.MultipartHelper;
-import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
-import org.springframework.core.io.ClassPathResource;
 
-import java.io.File;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -24,6 +23,7 @@ import static com.namabhiksha.telegram.util.CalendarConstants.START_TIME;
 
 public class CommonUtil {
     private final Calendar calendar;
+    private final Drive drive;
     private final String telegramURL;
     private final String apiToken;
     private final String zoomLinkText;
@@ -32,10 +32,12 @@ public class CommonUtil {
             = org.apache.logging.log4j.LogManager.getLogger(CommonUtil.class);
 
     public CommonUtil(Calendar calendar,
+                      Drive drive,
                       String telegramURL,
                       String apiToken,
                       String zoomLinkText) {
         this.calendar = calendar;
+        this.drive = drive;
         this.telegramURL = telegramURL;
         this.apiToken = apiToken;
         this.zoomLinkText = zoomLinkText;
@@ -83,35 +85,70 @@ public class CommonUtil {
                         continue;
                     }
 
-                    EventAttachment eventAttach = event.getAttachments().get(0);
-
-                    String fileId = eventAttach.getFileId();
-                    description = MessageBuilder.removeHTMLBlob(event.getDescription());
-                    log.info("getEvents::description = [{}]", description);
-
-                    File file = null;
-                    try (InputStream stream = new ClassPathResource(CalendarConstants.IMAGES + event.getSummary()+ CalendarConstants.JPG).getInputStream()) {
-
-                        file = new File(event.getSummary());
-                        // convert input stream to file
-                        FileUtils.copyInputStreamToFile(stream, file);
-
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-
-                    MultipartHelper.processPhoto(chatId,
-                            apiToken,
-                            file,
-                            description,
-                            telegramURL,
-                            zoomLinkText);
-
+                    processEventAttachments(chatId, event, eventAttachments);
                 } else {
                     plainTextMessage(chatId, event);
                 }
 
                 parsedTimeSlots.add(event.getId());
+            }
+        }
+    }
+
+    private void processEventAttachments(String chatId, Event event, List<EventAttachment> eventAttachments) throws IOException {
+        String description;
+        for (EventAttachment eventAttach : eventAttachments) {
+
+            String fileId = eventAttach.getFileId();
+            description = MessageBuilder.removeHTMLBlob(event.getDescription());
+            log.info("getEvents::description = [{}]", description);
+
+/*                 File file = null;
+        try (InputStream stream = new ClassPathResource(CalendarConstants.IMAGES + event.getSummary()+ CalendarConstants.JPG).getInputStream()) {
+
+            file = new File(event.getSummary());
+            // convert input stream to file
+            FileUtils.copyInputStreamToFile(stream, file);
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }*/
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            com.google.api.services.drive.model.File file = drive.files().get(fileId).execute();
+            String fileName = file.getName();
+
+            log.info("getEvents::fileName = [{}]", fileName);
+
+            drive.files().get(fileId).executeMediaAndDownloadTo(outputStream);
+
+            FileOutputStream outputfile = new FileOutputStream(fileName);
+            outputStream.writeTo(outputfile);
+            outputfile.close();
+            outputStream.close();
+
+            switch (file.getMimeType()) {
+                case CalendarConstants.IMAGE_JPEG:
+                    MultipartHelper.processPhoto(chatId,
+                            apiToken,
+                            fileName,
+                            description,
+                            telegramURL,
+                            zoomLinkText);
+                    break;
+                case CalendarConstants.AUDIO_MPEG:
+                case CalendarConstants.AUDIO_X_M_4_A:
+                case CalendarConstants.AUDIO_OGG:
+                    MultipartHelper.processMusic(chatId,
+                            apiToken,
+                            fileName,
+                            description,
+                            telegramURL,
+                            zoomLinkText);
+                    break;
+                default:
+                    plainTextMessage(chatId, event);
+                    break;
             }
         }
     }

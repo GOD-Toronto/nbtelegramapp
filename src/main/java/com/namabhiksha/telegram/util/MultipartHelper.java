@@ -24,7 +24,7 @@ public class MultipartHelper {
 
     public static void processPhoto(String chatidentifier,
                                     String apiToken,
-                                    File file,
+                                    String file,
                                     String cptMessage,
                                     String telegramUrl,
                                     String zoomLinkText)
@@ -35,8 +35,8 @@ public class MultipartHelper {
             StringBody captionTxt = createCaption(cptMessage, zoomLinkText, true);
             // sending a photo
             HttpPost httppost = new HttpPost(urlStringPhoto);
-
-            FileBody bin = new FileBody(file);
+            File file1 = new File(file);
+            FileBody bin = new FileBody(new File(file));
             StringBody parseMode = new StringBody("HTML", ContentType.TEXT_PLAIN);
             HttpEntity reqEntity = MultipartEntityBuilder.create()
                     .addPart("chat_id", chatid)
@@ -46,11 +46,16 @@ public class MultipartHelper {
                     .build();
 
             sendInstruction(httpclient, httppost, reqEntity);
-            log.info("processPhoto::File name: [{}], deleted status:[{}}", file.getName(), file.delete());
+            log.info("processPhoto::File name: [{}], deleted status:[{}}", file1.getName(), file1.delete());
         }
     }
 
-    public static void processMusic(String chatidentifier, String apiToken, String fileName, String cptMessage, String telegramUrl, String zoomLinkText)
+    public static void processMusic(String chatidentifier,
+                                    String apiToken,
+                                    String fileName,
+                                    String cptMessage,
+                                    String telegramUrl,
+                                    String zoomLinkText)
             throws IOException {
 
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
@@ -68,8 +73,8 @@ public class MultipartHelper {
                     .addPart("chat_id", chatid)
                     .addPart("audio", bin)
                     .addPart("caption", captionTxt)
-                    .addPart("title", new StringBody("", ContentType.TEXT_PLAIN))
-                    .addPart("performer", new StringBody("", ContentType.TEXT_PLAIN))
+                    .addPart("title", new StringBody(CalendarConstants.NAMA_TUNES, ContentType.TEXT_PLAIN))
+                    .addPart("performer", new StringBody(file.getName(), ContentType.TEXT_PLAIN))
                     .build();
 
             sendInstruction(httpclient, httppost, reqEntity);
