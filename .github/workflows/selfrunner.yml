@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - github_actions
+      - github_worklow
 
 jobs: 
   build: 
@@ -29,14 +29,31 @@ jobs:
       #     restore-keys: |
       #       ${{ runner.os }}-gradle-
 
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
+      - name: Create and move the config file
+        env:
+          SA_JSON: ${{ secrets.SA_JSON }}
+        run: | 
+            echo "$SA_JSON" > sa.json 
+            mv sa.json ./src/main/resources/config
+            ls -al
 
-      - name: Test with Gradle
-        run: ./gradlew clean test
+      - name: Create and move the application-seva yaml  file
+        env:
+          APPLICATION_SEVA_YAML: ${{ secrets.APPLICATION_SEVA_YAML }}
+        run: | 
+            echo "$APPLICATION_SEVA_YAML" > application-seva.yml 
+            mv application-seva.yml ./src/main/resources
+            ls -al
 
-      - name: Build and analyze
-        run: ./gradlew build --info
+
+      # - name: Make gradlew executable
+      #   run: chmod +x ./gradlew
+
+      # - name: Test with Gradle
+      #   run: ./gradlew clean test
+
+      # - name: Build and analyze
+      #   run: ./gradlew build --info
 
       # - name: Run bash script
       #   run: sh ./.github/scripts/deploy.sh
