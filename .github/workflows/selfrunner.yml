@@ -3,8 +3,8 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - github_actions
-
+      - github_workflow
+      - main
 jobs: 
   build: 
     name: "Build and Package"
@@ -29,6 +29,28 @@ jobs:
       #     restore-keys: |
       #       ${{ runner.os }}-gradle-
 
+      - name: Create and move the config file
+        env:
+          SA_JSON: ${{ secrets.SA_JSON }}
+        run: | 
+            cd ./src/main/resources
+            mkdir config
+            cd config
+            echo "$SA_JSON" > sa.json 
+            pwd
+            ls -al
+
+      - name: Create and move the application-seva yaml  file
+        env:
+          APPLICATION_SEVA_YAML: ${{ secrets.APPLICATION_SEVA_YAML }}
+        run: | 
+            echo "$APPLICATION_SEVA_YAML" > application-seva.yml 
+            pwd
+            mv application-seva.yml ./src/main/resources
+            cd ./src/main/resources
+            pwd
+            ls -al
+
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
@@ -38,17 +60,18 @@ jobs:
       - name: Build and analyze
         run: ./gradlew build --info
 
+      - name: Cleanup the Nambhiksha folder
+        run: |
+            cd /home/ec2-user/namabhiksha
+            rm *.jar
+            mv *.log /home/ec2-user/namabhiksha/logs
+
+      - name: Run bash script
+        run: sh ./.github/scripts/deploy.sh
+
       - name: Run online command
         run: |
-             pwd 
-             cd build/libs
-             pwd 
-             ls
-
-
-      # - name: Run bash script
-      #   run: sh ./.github/scripts/deploy.sh
-
-      # - name: Run online command
-      #   run: |
-      #       ps -ef|grep java
+            ps -ef|grep java
+            echo "cleaning up......."
+            cd /home/ec2-user/actions-runner/_work/nbtelegramapp
+            rm -rf nbtelegramapp
