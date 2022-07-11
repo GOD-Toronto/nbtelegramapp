@@ -1,6 +1,7 @@
 package com.namabhiksha.telegram.schedulers;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -19,9 +20,7 @@ public class VolunteerTasksScheduler {
     @Value("${calendars.volunteers.max-check-time}")
     private long maxTimeCheck;
 
-
-    private static final Logger log
-            = org.apache.logging.log4j.LogManager.getLogger(VolunteerTasksScheduler.class);
+    private static final Logger log = LoggerFactory.getLogger(VolunteerTasksScheduler.class);
 
     public VolunteerTasksScheduler(CommonUtil commonUtil) {
         this.commonUtil = commonUtil;

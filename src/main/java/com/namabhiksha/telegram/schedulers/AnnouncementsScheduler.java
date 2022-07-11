@@ -1,6 +1,7 @@
 package com.namabhiksha.telegram.schedulers;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -20,8 +21,7 @@ public class AnnouncementsScheduler {
     @Value("${calendars.announcements.max-check-time}")
     private long maxTimeCheck;
 
-    private static final Logger log
-            = org.apache.logging.log4j.LogManager.getLogger(AnnouncementsScheduler.class);
+    private static final Logger log = LoggerFactory.getLogger(AnnouncementsScheduler.class);
 
     public AnnouncementsScheduler(CommonUtil commonUtil) {
         this.commonUtil = commonUtil;

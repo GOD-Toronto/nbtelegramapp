@@ -1,6 +1,13 @@
 server:
   port: 9000
+  shutdown: graceful
 
 spring:
   profiles:
     default: seva
+  lifecycle:
+    timeout-per-shutdown-phase: "10s"
+
+# LOGGING
+logging:
+  config: classpath:logback-spring.xml

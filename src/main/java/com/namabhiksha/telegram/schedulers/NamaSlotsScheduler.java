@@ -1,6 +1,7 @@
 package com.namabhiksha.telegram.schedulers;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -19,8 +20,7 @@ public class NamaSlotsScheduler {
     @Value("${calendars.nama-slots.max-check-time}")
     private long maxTimeCheck;
 
-    private static final Logger log
-            = org.apache.logging.log4j.LogManager.getLogger(NamaSlotsScheduler.class);
+    private static final Logger log = LoggerFactory.getLogger(NamaSlotsScheduler.class);
 
     public NamaSlotsScheduler(CommonUtil commonUtil) {
         this.commonUtil = commonUtil;
