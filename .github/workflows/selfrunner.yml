@@ -32,9 +32,10 @@ jobs:
         env:
           SA_JSON: ${{ secrets.SA_JSON }}
         run: | 
-            echo "$SA_JSON" > sa.json 
-            pwd
             cd ./src/main/resources
+            mkdir config
+            cd config
+            echo "$SA_JSON" > sa.json 
             pwd
             ls -al
 
