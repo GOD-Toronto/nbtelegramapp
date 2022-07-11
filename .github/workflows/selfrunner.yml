@@ -31,12 +31,13 @@ jobs:
       # - name: Create and move the config file
       #   env:
       #     SA_JSON: ${{ secrets.SA_JSON }}
-      #   run: | 
-      #       echo "$SA_JSON" > sa.json 
-      #       pwd
-      #       mv sa.json ./src/main/resources/config
-      #       cd ./src/main/resources/config
-      #       ls -al
+        run: | 
+            echo "$SA_JSON" > sa.json 
+            pwd
+            cd ./src/main/resources
+            pwd
+            ls -al
+
 
       - name: Create and move the application-seva yaml  file
         env:
@@ -46,9 +47,10 @@ jobs:
             pwd
             mv application-seva.yml ./src/main/resources
             cd ./src/main/resources
+            pwd
             ls -al
 
-
+          # mv sa.json ./src/main/resources/config
       # - name: Make gradlew executable
       #   run: chmod +x ./gradlew
 
