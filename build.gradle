@@ -6,7 +6,6 @@ plugins {
 
 group = 'com.namabhiksha'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
 
 repositories {
     mavenCentral()
@@ -22,11 +21,10 @@ dependencies {
     implementation 'com.google.apis:google-api-services-calendar:v3-rev20211026-1.32.1'
     implementation 'com.google.apis:google-api-services-drive:v3-rev20211107-1.32.1'
     implementation 'org.projectlombok:lombok:1.18.22'
+    implementation 'commons-io:commons-io:2.4'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.apache.httpcomponents:httpclient:4.5.10'
     implementation 'org.apache.httpcomponents:httpmime:4.5.13'
-    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j
-    implementation 'commons-io:commons-io:2.4'
 }
 
 bootJar {
