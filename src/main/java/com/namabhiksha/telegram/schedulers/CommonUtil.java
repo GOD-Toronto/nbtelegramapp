@@ -80,7 +80,6 @@ public class CommonUtil {
                 }
 
                 Optional<List<EventAttachment>> eventAttachItemsOptional = Optional.ofNullable(event.getAttachments());
-                String description = null;
                 // either the event has posters or just the text..
                 if (eventAttachItemsOptional.isPresent()) {
                     List<EventAttachment> eventAttachments = event.getAttachments();
