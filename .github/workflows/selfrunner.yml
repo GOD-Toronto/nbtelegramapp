@@ -17,7 +17,7 @@ jobs:
         with: 
           cache: gradle
           distribution: adopt
-          java-version: 17
+          java-version: 8
 
       # - uses: actions/cache@v2
       #   with:
