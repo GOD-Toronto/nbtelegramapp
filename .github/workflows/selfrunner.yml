@@ -3,7 +3,6 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - github_workflow
       - main
 jobs: 
   build: 
@@ -73,5 +72,5 @@ jobs:
         run: |
             ps -ef|grep java
             echo "cleaning up......."
-            cd /home/ec2-user/actions-runner/_work/nbtelegramapp
-            rm -rf nbtelegramapp
+            cd /home/ec2-user/actions-runner/_work/nbtelegramapp/nbtelegramapp
+            rm -rf *
