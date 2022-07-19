@@ -67,7 +67,7 @@ jobs:
       #       rm -rf *
 
       - name: Send Build Status email
-        if: always()
+        # if: always()
         uses: dawidd6/action-send-mail@v3
         with:
           # mail server settings
@@ -83,4 +83,4 @@ jobs:
           # comma-separated string, send email to
           to: balaji.abiraman@gmail.com, uthji2021@gmail.com
           # from email name
-          from: Nama Bhiksha GitHub Actions  
+          from: Nama Bhiksha GitHub Actions
