@@ -8,6 +8,7 @@ jobs:
   build: 
     name: "Build and Package"
     runs-on: self-hosted
+    steps: 
       - uses: actions/checkout@v1
 
       - name: "Set up JDK 17"
