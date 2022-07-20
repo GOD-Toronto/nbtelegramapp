@@ -8,56 +8,43 @@ jobs:
   build: 
     name: "Build and Package"
     runs-on: self-hosted
+      - name: "Set up JDK 17"
+        uses: actions/setup-java@v2
+        with: 
+          cache: gradle
+          distribution: adopt
+          java-version: 8
 
-    steps: 
-      - uses: actions/checkout@v1
+      - name: Create and move the config file
+        env:
+          SA_JSON: ${{ secrets.SA_JSON }}
+        run: | 
+            cd ./src/main/resources
+            mkdir config
+            cd config
+            echo "$SA_JSON" > sa.json 
+            pwd
+            ls -al
 
-      - name: Read build.gradle
-        id: package
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ./build.gradle
-      - name: Echo package.json
-        run: echo "${{ steps.package.outputs.version }}"
+      - name: Create and move the application-seva yaml  file
+        env:
+          APPLICATION_SEVA_YAML: ${{ secrets.APPLICATION_SEVA_YAML }}
+        run: | 
+            echo "$APPLICATION_SEVA_YAML" > application-seva.yml 
+            pwd
+            mv application-seva.yml ./src/main/resources
+            cd ./src/main/resources
+            pwd
+            ls -al
 
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
 
-      # - name: "Set up JDK 17"
-      #   uses: actions/setup-java@v2
-      #   with: 
-      #     cache: gradle
-      #     distribution: adopt
-      #     java-version: 8
+      - name: Test with Gradle
+        run: ./gradlew clean test
 
-      # - name: Create and move the config file
-      #   env:
-      #     SA_JSON: ${{ secrets.SA_JSON }}
-      #   run: | 
-      #       cd ./src/main/resources
-      #       mkdir config
-      #       cd config
-      #       echo "$SA_JSON" > sa.json 
-      #       pwd
-      #       ls -al
-
-      # - name: Create and move the application-seva yaml  file
-      #   env:
-      #     APPLICATION_SEVA_YAML: ${{ secrets.APPLICATION_SEVA_YAML }}
-      #   run: | 
-      #       echo "$APPLICATION_SEVA_YAML" > application-seva.yml 
-      #       pwd
-      #       mv application-seva.yml ./src/main/resources
-      #       cd ./src/main/resources
-      #       pwd
-      #       ls -al
-
-      # - name: Make gradlew executable
-      #   run: chmod +x ./gradlew
-
-      # - name: Test with Gradle
-      #   run: ./gradlew clean test
-
-      # - name: Build and analyze
-      #   run: ./gradlew build --info
+      - name: Build and analyze
+        run: ./gradlew build -Pversion=0.0.1-SNAPSHOT_$(date +%Y-%m-%d_%H-%M-%S) --info
 
       # - name: Cleanup the Nambhiksha folder
       #   run: |
