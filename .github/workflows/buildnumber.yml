@@ -42,9 +42,7 @@ jobs:
 
       - name: Build version
         run: |
-            echo $(date +%Y-%m-%d_%H-%M-%S)
             echo 0.0.1-SNAPSHOT_$(date +%Y-%m-%d_%H-%M-%S) > version.txt
-
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
@@ -52,48 +50,42 @@ jobs:
       - name: Test with Gradle
         run: ./gradlew clean test
 
-      #     # > version.txt && ./gradlew release && echo 1.3-SNAPSHOT > version.txt
-
       - name: Build and analyze
         run: |
           ./gradlew build --info
-          pwd
-          ls -l
 
-      # - name: Cleanup the Nambhiksha folder
-      #   run: |
-      #       cd /home/ec2-user/namabhiksha
-      #       DateTimeStamp=$(date +%Y-%m-%d_%H-%M-%S)
-      #       mv nbtelegramapp-0.0.1-SNAPSHOT.jar nbtelegramapp-0.0.1-SNAPSHOT_$DateTimeStamp.jar
-      #       # rm *.jar
-      #       mv *.log /home/ec2-user/namabhiksha/logs
+      - name: Cleanup the Nambhiksha folder
+        run: |
+            cd /home/ec2-user/namabhiksha
+            rm *.jar
+            mv *.log /home/ec2-user/namabhiksha/logs
 
-      # - name: Run bash script
-      #   run: sh ./.github/scripts/deploy.sh
+      - name: Run bash script
+        run: sh ./.github/scripts/deploy.sh
 
-      # - name: Run online command
-      #   run: |
-      #       ps -ef|grep java
-      #       echo "cleaning up......."
-      #       cd /home/ec2-user/actions-runner/_work/nbtelegramapp/nbtelegramapp
-      #       rm -rf *
+      - name: Run online command
+        run: |
+            ps -ef|grep java
+            echo "cleaning up......."
+            cd /home/ec2-user/actions-runner/_work/nbtelegramapp/nbtelegramapp
+            rm -rf *
 
-      # - name: Send Build Status email
-      #   # if: always()
-      #   uses: dawidd6/action-send-mail@v3
-      #   with:
-      #     # mail server settings
-      #     server_address: smtp.gmail.com
-      #     server_port: 465
-      #     # user credentials
-      #     username: ${{ secrets.EMAIL_USERNAME }}
-      #     password: ${{ secrets.EMAIL_PASSWORD }}
-      #     # email subject
-      #     subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
-      #     # email body as text
-      #     body: ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
-      #     # comma-separated string, send email to
-      #     to: pkvrajan@gmail.com, arundir@gmail.com, testid216@gmail.com, uthji2021@gmail.com
-      #     # from email name
-      #     from: Nama Bhiksha GitHub Actions
-      #     secure: true
+      - name: Send Build Status email
+        # if: always()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          # mail server settings
+          server_address: smtp.gmail.com
+          server_port: 465
+          # user credentials
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          # email subject
+          subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
+          # email body as text
+          body: ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
+          # comma-separated string, send email to
+          to: pkvrajan@gmail.com, arundir@gmail.com, testid216@gmail.com, uthji2021@gmail.com
+          # from email name
+          from: Nama Bhiksha GitHub Actions
+          secure: true
