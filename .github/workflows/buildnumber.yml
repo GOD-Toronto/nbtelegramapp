@@ -18,7 +18,7 @@ jobs:
         with:
           path: ./build.gradle
       - name: Echo package.json
-        run: echo "${{ steps.package.outputs.content }}"
+        run: echo "${{ steps.package.outputs.content.version }}"
 
 
       # - name: "Set up JDK 17"
