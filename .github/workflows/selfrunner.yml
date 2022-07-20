@@ -8,7 +8,6 @@ jobs:
   build: 
     name: "Build and Package"
     runs-on: self-hosted
-
     steps: 
       - uses: actions/checkout@v1
 
@@ -41,6 +40,10 @@ jobs:
             pwd
             ls -al
 
+      - name: Build version
+        run: |
+            echo 0.0.1-SNAPSHOT_$(date +%Y-%m-%d_%H-%M-%S) > version.txt
+
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
@@ -48,12 +51,13 @@ jobs:
         run: ./gradlew clean test
 
       - name: Build and analyze
-        run: ./gradlew build --info
+        run: |
+          ./gradlew build --info
 
       - name: Cleanup the Nambhiksha folder
         run: |
             cd /home/ec2-user/namabhiksha
-            rm *.jar
+            mv *.jar ./superceded/
             mv *.log /home/ec2-user/namabhiksha/logs
 
       - name: Run bash script
