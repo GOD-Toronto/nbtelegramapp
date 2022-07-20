@@ -40,20 +40,21 @@ jobs:
             pwd
             ls -al
 
+      - name: Build version
+        run: |
+            echo 0.0.1-SNAPSHOT_$(date +%Y-%m-%d_%H-%M-%S) > version.txt
+
+
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
       - name: Test with Gradle
         run: ./gradlew clean test
 
-      # - name: Build version
-      #   run: |
-      #       echo 0.0.1-SNAPSHOT_$(date +%Y-%m-%d_%H-%M-%S) > version.txt
       #     # > version.txt && ./gradlew release && echo 1.3-SNAPSHOT > version.txt
 
       - name: Build and analyze
-        run: | 
-          echo 0.0.1-SNAPSHOT_$(date +%Y-%m-%d_%H-%M-%S) > version.txt
+        run: |
           ./gradlew build --info
 
       # - name: Cleanup the Nambhiksha folder
