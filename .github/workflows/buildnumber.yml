@@ -42,8 +42,8 @@ jobs:
 
       - name: Build version
         run: |
-            DateTimeStamp=$(date +%Y-%m-%d_%H-%M-%S)
-            echo 0.0.1-SNAPSHOT_${{DateTimeStamp}} > version.txt
+            echo $(date +%Y-%m-%d_%H-%M-%S)
+            echo 0.0.2-SNAPSHOT > version.txt
 
 
       - name: Make gradlew executable
