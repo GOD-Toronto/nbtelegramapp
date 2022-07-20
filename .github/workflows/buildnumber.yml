@@ -42,7 +42,8 @@ jobs:
 
       - name: Build version
         run: |
-            echo 0.0.1-SNAPSHOT_$(date +%Y-%m-%d_%H-%M-%S) > version.txt
+            DateTimeStamp=$(date +%Y-%m-%d_%H-%M-%S)
+            echo 0.0.1-SNAPSHOT_${{DateTimeStamp}} > version.txt
 
 
       - name: Make gradlew executable
@@ -56,6 +57,8 @@ jobs:
       - name: Build and analyze
         run: |
           ./gradlew build --info
+          pwd
+          ls -l
 
       # - name: Cleanup the Nambhiksha folder
       #   run: |
