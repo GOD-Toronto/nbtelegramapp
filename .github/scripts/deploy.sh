@@ -3,7 +3,8 @@ echo "Present PWD ---> "
 pwd
 
 cd ./build/libs/
-cp nbtelegramapp-0.0.1-SNAPSHOT.jar /home/ec2-user/namabhiksha
+rm nbtelegramapp-0.0.1-SNAPSHOT_*-plain.jar
+cp nbtelegramapp-0.0.1-SNAPSHOT_*.jar /home/ec2-user/namabhiksha
 
 kiperf=$(pidof java)
 
@@ -14,19 +15,13 @@ else
   sudo kill -9 $kiperf
 fi
 
-echo "Delete the old log file"
-rm -v *.out
-
 echo "Bringing the App up"
 
 cd /home/ec2-user/namabhiksha
-# nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva &
-
-# sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva &
 
 DateTimeStamp=$(date +%Y-%m-%d_%H-%M-%S)
 logFileName=log_$DateTimeStamp.log
-sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT.jar --spring.profiles.active=seva > $logFileName 2>&1 &
+sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT_*.jar --spring.profiles.active=seva > $logFileName 2>&1 &
 
 sleep 15
 
