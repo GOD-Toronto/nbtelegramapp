@@ -57,7 +57,7 @@ jobs:
       - name: Cleanup the Nambhiksha folder
         run: |
             cd /home/ec2-user/namabhiksha
-            rm *.jar
+            mv *.jar ./superceded/
             mv *.log /home/ec2-user/namabhiksha/logs
 
       - name: Run bash script
