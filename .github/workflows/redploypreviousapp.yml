@@ -1,7 +1,7 @@
 name: "NamaBhiksha: Redeploy the previous JAR"
 on:
   workflow_dispatch:
-    push:
+  push:
     branches:
       - github_workflow
 
