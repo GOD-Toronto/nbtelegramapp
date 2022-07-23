@@ -30,7 +30,7 @@ if [[ -z $kiperf ]]; then
   sleep 15
 else
   echo "JAVA process is running..."
-  kill -9 $kiperf
+  sudo kill -9 $kiperf
   # sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT_*.jar --spring.profiles.active=seva > $logFileName 2>&1 &
   ps -aux|grep java
   sleep 15
