@@ -20,7 +20,7 @@ echo "------ List the files to namabhiksha folder"
 cd /home/ec2-user/namabhiksha/
 ls -l
 
-echo "------ Bring the app the app"
+echo "------ Bringing the app up"
 kiperf=$(pidof java)
 echo "kiperf------->"$kiperf
 
@@ -46,7 +46,7 @@ ps -aux|grep java
 if [[ -z $javapid ]]; then
   echo "java process did not start"
 else
-  echo "Application deployed and running...."
+  echo "Application is redeployed and running...."
 fi
 
 echo "************** ALL DONE... JAI G!! **************"
