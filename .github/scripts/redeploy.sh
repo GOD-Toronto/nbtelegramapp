@@ -1,11 +1,11 @@
-#!/bin/bash
-# echo "------ Deleting Jar and log files in /home/ec2-user/namabhiksha/"
-# cd /home/ec2-user/namabhiksha/
-# rm -f *.jar
-# rm -f *.log
+!/bin/bash
+echo "------ Deleting Jar and log files in /home/ec2-user/namabhiksha/"
+cd /home/ec2-user/namabhiksha/
+rm -f *.jar
+rm -f *.log
 
-# cd /home/ec2-user/namabhiksha/logs
-# rm -f nbtelegramapp.log
+cd /home/ec2-user/namabhiksha/logs
+rm -f nbtelegramapp.log
 
 echo "------ Fetch the latest Jar file name and copy the file to namabhiksha folder"
 
@@ -25,11 +25,21 @@ kiperf=$(pidof java)
 
 if [[ -z $kiperf ]]; then
   echo "java process not running..."
-  # sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT_*.jar --spring.profiles.active=seva > $logFileName 2>&1 &
-  # sleep 15
+  sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT_*.jar --spring.profiles.active=seva > $logFileName 2>&1 &
+  sleep 15
 else
   echo "JAVA process is running..."
-  # kill -9 $(pidof java)
-  # sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT_*.jar --spring.profiles.active=seva > $logFileName 2>&1 &
-  # sleep 15
+  kill -9 $(pidof java)
+  sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT_*.jar --spring.profiles.active=seva > $logFileName 2>&1 &
+  sleep 15
 fi
+
+echo "------ The application start is running"
+
+if [[ -z $javapid ]]; then
+  echo "java process did not start"
+else
+  echo "Application deployed and running...."
+fi
+
+echo "************** ALL DONE... JAI G!! **************"
