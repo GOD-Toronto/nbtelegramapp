@@ -1,0 +1,33 @@
+name: "NamaBhiksha: Redeploy the previous JAR"
+on:
+  workflow_dispatch:
+
+jobs: 
+  build: 
+    name: "Build and Package"
+    runs-on: self-hosted
+    steps: 
+      - uses: actions/checkout@v1
+
+      - name: Run bash script
+        run: sh ./.github/scripts/redeploy.sh
+
+      - name: Send Build Status email
+        # if: always()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          # mail server settings
+          server_address: smtp.gmail.com
+          server_port: 465
+          # user credentials
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          # email subject
+          subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
+          # email body as text
+          body: ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
+          # comma-separated string, send email to
+          to: pkvrajan@gmail.com, arundir@gmail.com, testid216@gmail.com, uthji2021@gmail.com
+          # from email name
+          from: Nama Bhiksha GitHub Actions
+          secure: true
