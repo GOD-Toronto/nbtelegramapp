@@ -25,14 +25,13 @@ kiperf=$(pidof java)
 echo "kiperf------->"$kiperf
 
 if [[ -z $kiperf ]]; then
-  echo "java process not running..."
+  echo "JAVA process NOT running..."
   sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT_*.jar --spring.profiles.active=seva > $logFileName 2>&1 &
   sleep 15
 else
   echo "JAVA process is running..."
   sudo kill -9 $kiperf
-  # sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT_*.jar --spring.profiles.active=seva > $logFileName 2>&1 &
-  ps -aux|grep java
+  sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT_*.jar --spring.profiles.active=seva > $logFileName 2>&1 &
   sleep 15
 fi
 
