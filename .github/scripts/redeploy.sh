@@ -22,6 +22,7 @@ ls -l
 
 echo "------ Bring the app the app"
 kiperf=$(pidof java)
+echo "kiperf------->"$kiperf
 
 if [[ -z $kiperf ]]; then
   echo "java process not running..."
@@ -29,12 +30,18 @@ if [[ -z $kiperf ]]; then
   sleep 15
 else
   echo "JAVA process is running..."
-  kill -9 $(pidof java)
+  kill -9 $kiperf
   sudo nohup java -jar nbtelegramapp-0.0.1-SNAPSHOT_*.jar --spring.profiles.active=seva > $logFileName 2>&1 &
   sleep 15
 fi
 
 echo "------ The application start is running"
+
+
+javapid=$(pidof java)
+echo "java pid: $javapid"
+
+ps -aux|grep java
 
 if [[ -z $javapid ]]; then
   echo "java process did not start"
